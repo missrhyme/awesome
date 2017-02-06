@@ -1,9 +1,8 @@
 **/.DS_Store
 **/node_modules
+src/front/dist
 
 .idea/
 target/
 *.log
 *.class
-
-

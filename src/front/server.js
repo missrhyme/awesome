@@ -16,11 +16,12 @@ app.set('view engine', 'html')
 
 // var compiler = webpack(config)
 app.use('/lib', express.static('lib'))
+app.use('/dist', express.static('dist'))
 // app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
 // app.use(webpackHotMiddleware(compiler))
 
 app.get("/", function(req, res) {
-  res.render('test/test')
+  res.render('account/login')
 })
 
 app.listen(port, function(error) {

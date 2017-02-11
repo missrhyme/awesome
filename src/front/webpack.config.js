@@ -27,6 +27,17 @@ module.exports = {
       loader: 'babel-loader',
       exclude: /node_modules/,
       include: __dirname
+    },
+    {
+      test: /\.css$/,
+      loader: 'style-loader!css-loader'
+    },
+    {
+      test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+      loader: 'file-loader'
     }]
+  },
+  externals: {
+    vue: 'Vue'
   }
 };

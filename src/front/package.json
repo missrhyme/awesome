@@ -5,14 +5,19 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack"
+    "webpack": "webpack",
+    "watch": "webpack -w"
   },
   "author": "Rhyme",
   "license": "ISC",
   "dependencies": {
     "ejs": "^2.5.5",
     "ejs-mate": "^2.3.0",
-    "express": "^4.14.1"
+    "element-ui": "^1.1.6",
+    "express": "^4.14.1",
+    "file-loader": "^0.10.0",
+    "style-loader": "^0.13.1",
+    "vue": "^2.1.10"
   },
   "devDependencies": {
     "babel": "^6.5.2",

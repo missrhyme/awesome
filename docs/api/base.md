@@ -87,7 +87,7 @@ success| 重置密码是否成功
 
 request| detail
 -----|------
-mobile | 手机验证码
+mobile | 手机号码
 
 response| detail
 -----|------

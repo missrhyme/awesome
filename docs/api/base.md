@@ -42,7 +42,7 @@ success| 登录是否成功
 request| detail
 -----|------
 username | 用户名
-keptcha | 手机验证码
+captcha | 手机验证码
 password | 密码
 
 response| detail
@@ -65,7 +65,7 @@ success| 注册是否成功
 request| detail
 -----|------
 username | 用户名
-keptcha | 手机验证码
+captcha | 手机验证码
 password | 新密码
 
 response| detail
@@ -83,7 +83,7 @@ success| 重置密码是否成功
 }
 ```
 
-4.发送验证码 GET /api/keptcha
+4.发送验证码 GET /api/captcha
 
 request| detail
 -----|------

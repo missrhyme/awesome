@@ -9,9 +9,10 @@ checksums in update := Nil
 libraryDependencies ++= Seq(
     ws,
     "org.json4s" %% "json4s-native" % "3.3.0"
-
 )
 
+lazy val root = (project in file("."))
+    .enablePlugins(PlayScala)
 /*
 lazy val root = (project in file("."))
     .enablePlugins(PlayScala)

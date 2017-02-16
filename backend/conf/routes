@@ -1,0 +1,18 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Default path will just redirect to the computer list
+GET     /                             controllers.Application.index
+
+POST    /api/login                    controllers.Application.login
+
+POST    /api/register                 controllers.Application.register
+
+POST    /api/resetpassword            controllers.Application.resetpassword
+
+GET     /api/captcha                  controllers.Application.captcha(mobile: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                 controllers.Assets.at(path="/public", file)
+

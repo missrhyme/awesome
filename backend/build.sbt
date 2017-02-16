@@ -6,6 +6,8 @@ scalaVersion := "2.11.7"
 
 checksums in update := Nil
 
+resolvers += "oschina" at "http://maven.oschina.net/content/groups/public/"
+
 libraryDependencies ++= Seq(
     ws,
     "org.json4s" %% "json4s-native" % "3.3.0"

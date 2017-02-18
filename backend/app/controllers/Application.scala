@@ -10,11 +10,14 @@ import scala.concurrent.Future
 import org.json4s.native.Serialization.write
 import views._
 
+import scala.util.Random
+
 /**
   * Advanced structured data based-UI for eBay
   */
 object Application extends Controller {
     implicit val formats = DefaultFormats
+    val CAPTCHA_SIZE = 6
     /******************  Action begin  ******************/
     def index = Action {
         Ok(html.template("test1", "test2"))
@@ -71,8 +74,10 @@ object Application extends Controller {
     }
 
     def captcha(mobile: String) = Action.async {
+        Random.setSeed(System.currentTimeMillis())
         Future{
-            Ok("test")
+            val number = (Random.nextDouble() * scala.math.pow(10, CAPTCHA_SIZE)).toInt
+            Ok(number.toString)
         }
     }
     /******************  Action end  ******************/

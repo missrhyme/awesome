@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
-  <script src="http://cdn.bootcss.com/vue/2.1.6/vue.min.js"></script>
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="//unpkg.com/vue/dist/vue.js"></script>
+  <script src="//unpkg.com/element-ui/lib/index.js"></script>
   <style>
       /* http://meyerweb.com/eric/tools/css/reset/
        v2.0 | 20110126
@@ -64,7 +64,7 @@
     <el-menu theme="dark" default-active="1" class="el-menu-demo" mode="horizontal" class="nav">
       <el-col :span="4">
         <img
-          src="https://imgsa.baidu.com/baike/c0%3Dbaike116%2C5%2C5%2C116%2C38/sign=ea76f49e910a304e462fa8a8b0a1cce3/d53f8794a4c27d1ec572bb5e1dd5ad6edcc438d7.jpg"
+          src="/lib/logo.png"
           alt=""
           width="150"
           height="60"
@@ -72,36 +72,31 @@
         >
       </el-col>
       <el-col :span="20">
-        <el-menu-item index="1">处理中心</el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">我的工作台</template>
-          <el-menu-item index="2-1">选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-          <el-menu-item index="2-3">选项3</el-menu-item>
+        <el-submenu index="2" style="float:right">
+          <template slot="title">missrhyme</template>
+          <el-menu-item index="2-1">个人资料</el-menu-item>
+          <el-menu-item index="2-2">退出</el-menu-item>
         </el-submenu>
-        <el-menu-item index="3"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+        <el-menu-item index="1" style="float:right">帮助中心</el-menu-item>
       </el-col>
     </el-menu>
 
     <el-col :span="4">
-      <el-menu default-active="2" class="el-menu-vertical-demo" style="height: 1000px">
-        <el-submenu index="1">
-          <template slot="title"><i class="el-icon-message"></i>导航一</template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
+      <el-menu default-active="2" class="el-menu-vertical-demo" style="padding-top: 20px;height: 1000px">
+        <el-menu-item index="1"><i class="el-icon-setting"></i>店铺管理</el-menu-item>
+        <el-submenu index="2">
+          <template slot="title"><i class="el-icon-menu"></i>跟卖信息</template>
+            <el-menu-item index="1-1">商品列表</el-menu-item>
+            <el-menu-item index="1-2">白名单管理</el-menu-item>
           </el-submenu>
         </el-submenu>
-        <el-menu-item index="2"><i class="el-icon-menu"></i>导航二</el-menu-item>
-        <el-menu-item index="3"><i class="el-icon-setting"></i>导航三</el-menu-item>
+        <el-submenu index="3">
+          <template slot="title"><i class="el-icon-message"></i>信息通知</template>
+            <el-menu-item index="1-1">模板管理</el-menu-item>
+            <el-menu-item index="1-2">邮件管理</el-menu-item>
+            <el-menu-item index="1-3">短信管理</el-menu-item>
+          </el-submenu>
+        </el-submenu>
       </el-menu>
     </el-col>
     <el-col :span="20">
@@ -109,30 +104,5 @@
     </el-col>
   </div>
 </body>
-<script>
-  new Vue({
-    el: '#app',
-    data: function(){
-      return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
-      }
-    }
-  })
-</script>
+
 </html>

@@ -88,12 +88,35 @@
     text-align: right;
     font-size: 12px;
   }
+  .captcha-button{
+    text-decoration: none;
+    color: #fff;
+    background: #6dbdd0;
+    height: 37px;
+    line-height: 37px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 5px;
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    padding: 0 5px;
+  }
+  .captcha-wrap{
+    padding-left: 20px;
+    height: 37px;
+  }
+  .captcha-wrap input{
+    width: 240px;
+    float: left;
+    margin: 0
+  }
 </style>
 </head>
 <body>
   <div class="login-container">
     <div class="login-panel">
-      <div class="login-icon">Amazon Helper</div>
+      <div class="login-icon">Amazon Defender</div>
       <!-- login -->
       <form class="login-form" action="/login" v-if="type == 1">
         <input type="text" name="username" placeholder="请输入手机号">
@@ -108,7 +131,10 @@
       <!-- register -->
       <form class="login-form" action="/register" v-if="type == 2">
         <input type="text" name="username" placeholder="请输入手机号">
-        <input type="text" name="keptcha" placeholder="手机验证码">
+        <div class="captcha-wrap">
+          <input type="text" name="password" placeholder="请输入验证码">
+          <a class="captcha-button" href="javascript:;">发送验证码</a>
+        </div>
         <input type="password" name="password" placeholder="请输入密码">
         <input type="password" name="password_repeat" placeholder="请再次输入密码">
         <button type="submit" class="login-button">注册</button>
@@ -121,7 +147,10 @@
       <!-- reset password -->
       <form class="login-form" action="/resetpassword" v-if="type == 3">
         <input type="text" name="username" placeholder="请输入手机号">
-        <input type="text" name="password" placeholder="请输入验证码">
+        <div class="captcha-wrap">
+          <input type="text" name="password" placeholder="请输入验证码">
+          <a class="captcha-button" href="javascript:;">发送验证码</a>
+        </div>
         <input type="password" name="password" placeholder="请输入新密码">
         <input type="password" name="password_repeat" placeholder="请再次输入新密码">
         <button type="submit" class="login-button">确定</button>

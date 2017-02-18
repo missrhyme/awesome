@@ -11,7 +11,9 @@ resolvers += "oschina" at "http://maven.oschina.net/content/groups/public/"
 libraryDependencies ++= Seq(
     ws,
     jdbc,
-    "org.json4s" %% "json4s-native" % "3.3.0"
+    "mysql" % "mysql-connector-java" % "5.1.24",
+    "org.json4s" %% "json4s-native" % "3.3.0",
+    "org.json4s" %% "json4s-jackson" % "3.3.0"
 )
 
 lazy val root = (project in file("."))

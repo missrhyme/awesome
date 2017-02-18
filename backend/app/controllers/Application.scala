@@ -1,22 +1,20 @@
 package controllers
 
+import controllers.response.{Response, LoginData}
+import org.json4s.DefaultFormats
 import play.api.mvc._
 import play.api.db._
 import play.api.Play.current
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
-
+import org.json4s.native.Serialization.write
 import views._
 
 /**
   * Advanced structured data based-UI for eBay
   */
 object Application extends Controller {
-    def resp = {
-        ("status" -> "200")
-    }
-
+    implicit val formats = DefaultFormats
     /******************  Action begin  ******************/
     def index = Action {
         Ok(html.template("test1", "test2"))
@@ -34,8 +32,15 @@ object Application extends Controller {
                 val rs = state.executeQuery()
                 rs.next()
                 val count = rs.getInt("cnt")
+                if (count == 1) {
+                    val resp = Response("200", "登陆成功", LoginData(true))
+                    Ok(write(resp))
+                }
+                else{
+                    val resp = Response("102", "参数错误", LoginData(false))
+                    Ok(write(resp))
+                }
             }
-            Ok("test")
         }
     }
 

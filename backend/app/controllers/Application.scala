@@ -49,7 +49,15 @@ object Application extends Controller {
         val captcha = (request.body \ "captcha").as[String]
         val password = (request.body \ "password").as[String]
         Future{
-            Ok("test")
+            DB.withConnection { conn =>
+                val sql = "insert into users values (NULL, ?, ?)"
+                val state = conn.prepareStatement(sql)
+                state.setString(1, username)
+                state.setString(2, password)
+                state.executeUpdate()
+                val resp = Response("200", "注册成功", LoginData(true))
+                Ok(write(resp))
+            }
         }
     }
 

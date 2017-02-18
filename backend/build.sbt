@@ -10,6 +10,7 @@ resolvers += "oschina" at "http://maven.oschina.net/content/groups/public/"
 
 libraryDependencies ++= Seq(
     ws,
+    jdbc,
     "org.json4s" %% "json4s-native" % "3.3.0"
 )
 

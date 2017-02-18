@@ -1,35 +1,16 @@
-@(script: Html)(content: Html)
+@(content1: Html)(content2: Html)
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>eBay Search Query Explorer</title>
+        <title>amz defend</title>
         @***** js *****@
-        @script
         @***** css *****@
-        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")" />
-        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dropload.css")" />
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")" />
+
     </head>
     <body>
-
-        <header class="topbar">
-            <h1 class="fill">
-                <a href="@routes.Application.index()">
-                    Search Explorer
-                </a>
-            </h1>
-        </header>
-
-        <section id="main">
-            @content
-        </section>
-
-        <div class="footer">
-        Feedbacks / Bugs / Questions ? Please reach out to <a href="mailto:DL-eBay-SearchExplorer@@ebay.com">DL-eBay-SearchExplorer</a>
-        <br>
-        Source code at <a href="https://github.corp.ebay.com/search-metrics/search-explorer">github.corp.ebay.com/search-metrics/search-explorer</a>
-        <br>
-        Documentation at <a href="https://wiki.vip.corp.ebay.com/display/SQS/2016+Search+Explorer">https://wiki.vip.corp.ebay.com/display/SQS/2016+Search+Explorer</a></div>
+            @content1
+            @content2
+        <div class="footer"></div>
     </body>
 </html>

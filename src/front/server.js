@@ -24,6 +24,10 @@ app.get("/", function(req, res) {
   res.render('account/login')
 })
 
+app.get("/shopList", function(req, res) {
+  res.render('shop/shopList')
+})
+
 app.listen(port, function(error) {
   if (error) {
     console.error(error)

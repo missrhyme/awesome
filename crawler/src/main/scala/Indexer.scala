@@ -14,22 +14,25 @@ class Indexer extends Actor{
     var connection:Connection = _
 
     override def receive: Receive = {
-        case index: Index =>
+        case Index(items) =>
             try {
                 Class.forName(driver)
                 connection = DriverManager.getConnection(url, username, password)
-                val statement = connection.createStatement
-                val rs = statement.executeQuery("SELECT * FROM buybox_scrap")
-                while (rs.next()) {
-
+                items.foreach { item =>
+                    val sql = "insert into buybox_scrap values (NULL, NOW(), ?, ?, ?, ?)"
+                    val state = connection.prepareStatement(sql)
+                    state.setString(1, item.item_id)
+                    state.setDouble(2, item.price)
+                    state.setInt(3, item.rank)
+                    state.setString(4, item.seller)
+                    state.executeUpdate()
                 }
-
             }
             catch {
                 case e: Exception => e.printStackTrace()
             }
             finally {
-
+                connection.close()
             }
 
 

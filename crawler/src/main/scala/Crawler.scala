@@ -24,12 +24,15 @@ class Crawler(id: Int, indexer: ActorRef) extends Actor {
                     elem.text().trim.drop(1).toDouble
                 }.toList
                 val sellers = doc.select(".olpSellerName").asScala.map { elem =>
-                    elem.child(1)
+                    if (elem.text().isEmpty)
+                        "Amazon"
+                    else
+                        elem.text()
                 }.toList
-                val items = (1 to prices.size).map{ idx =>
-
-                }
-                //indexer ! Index
+                val items = (1 to prices.size).map{ rank =>
+                    Buybox(item, prices(rank - 1), rank, sellers(rank - 1))
+                }.toList
+                indexer ! Index(items)
 
 
             case _ =>

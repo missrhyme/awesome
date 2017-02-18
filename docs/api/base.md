@@ -185,26 +185,20 @@ token | token验证结果 成功true, 失败false
 
 示例：
 ```json
-{
-  "status" : 200,
-  "data": {
-   "list": [
-     {
-       "id": "10000",
-       "name": "很厉害的店铺",
-       "status": 1,
-       "token": true
-     },
-     {
-       "id": "10001",
-       "name": "很厉害的店铺2",
-       "status": 0,
-       "token": true
-     }
-   ]
-  },
-  "msg" : ""
-}
+ [
+   {
+     "id": "10000",
+     "name": "很厉害的店铺",
+     "status": 1,
+     "token": true
+   },
+   {
+     "id": "10001",
+     "name": "很厉害的店铺2",
+     "status": 0,
+     "token": true
+   }
+ ]
 ```
 
 8.获取店铺信息 GET /api/shop/detail

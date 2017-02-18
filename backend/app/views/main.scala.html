@@ -1,17 +1,24 @@
-@(content1: Html)(content2: Html)
+@(header: Html)(body: Html)(footer: Html)
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/main.css")" />
-        <title>amz defend</title>
-        @***** js *****@
-        @***** css *****@
-
-    </head>
-    <body>
-            @content1
-            @content2
-        <div class="footer"></div>
-    </body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+    <link rel="stylesheet" href="/lib/base.css">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/main.css")" />
+    <script src="//unpkg.com/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/element-ui/lib/index.js"></script>
+    <title>amz defend</title>
+    @header
+    @***** js *****@
+    @***** css *****@
+  </head>
+  <body>
+    @body
+    <div class="footer"></div>
+    @footer
+  </body>
 </html>

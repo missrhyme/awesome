@@ -45,7 +45,7 @@ export default function fetch({
     quest
       .then(
         response => {
-          const {body} = response;
+          const body = response.body || JSON.parse(response.text);
           if (body.status == 200) return body.data;
           else Promise.reject(body.msg);
         },

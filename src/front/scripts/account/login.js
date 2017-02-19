@@ -38,7 +38,6 @@ new Vue({
 
     handleCaptcha (mobile) {
       if (this.hasCaptcha) return;
-      console.log(mobile);
       fetch({
         url: '/api/captcha',
         type: 'post',
@@ -72,7 +71,10 @@ new Vue({
         type: 'POST',
         data: this.loginForm
       })
-      .then( () => window.location.href = '/shopList' )
+      .then( r => {
+        if (r.success) window.location.href = '/shopList';
+        else this.$message('用户名或密码错误，请重试。');
+      })
     },
 
     handleRegister (e) {
@@ -82,7 +84,10 @@ new Vue({
         type: 'POST',
         data: this.registerForm
       })
-      .then( () => console.log('aa'))
+      .then(
+         () => window.location.href = '/shopList',
+         () => this.$message('注册失败，请重试。')
+      )
     },
 
     handleResetpassword (e) {
@@ -92,7 +97,7 @@ new Vue({
         type: 'POST',
         data: this.resetpasswordForm
       })
-      .then( () => console.log('aa'))
+      .then( () => window.location.href = '/shopList')
     }
   }
 })

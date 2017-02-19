@@ -142,8 +142,7 @@ function fetch(_ref) {
     quest = _superagent2.default.get(url).timeout(timeout).query(data);
   }
   return quest.then(function (response) {
-    var body = response.body;
-
+    var body = response.body || JSON.parse(response.text);
     if (body.status == 200) return body.data;else Promise.reject(body.msg);
   }, function (err) {
     return Promise.reject(err);
@@ -2160,7 +2159,6 @@ new Vue({
       var _this = this;
 
       if (this.hasCaptcha) return;
-      console.log(mobile);
       (0, _fetch2.default)({
         url: '/api/captcha',
         type: 'post',
@@ -2179,23 +2177,29 @@ new Vue({
       });
     },
     handleLogin: function handleLogin(e) {
+      var _this2 = this;
+
       e.preventDefault();
       (0, _fetch2.default)({
         url: '/api/login',
         type: 'POST',
         data: this.loginForm
-      }).then(function () {
-        return window.location.href = '/shopList';
+      }).then(function (r) {
+        if (r.success) window.location.href = '/shopList';else _this2.$message('用户名或密码错误，请重试。');
       });
     },
     handleRegister: function handleRegister(e) {
+      var _this3 = this;
+
       e.preventDefault();
       (0, _fetch2.default)({
         url: '/api/register',
         type: 'POST',
         data: this.registerForm
       }).then(function () {
-        return console.log('aa');
+        return window.location.href = '/shopList';
+      }, function () {
+        return _this3.$message('注册失败，请重试。');
       });
     },
     handleResetpassword: function handleResetpassword(e) {
@@ -2205,7 +2209,7 @@ new Vue({
         type: 'POST',
         data: this.resetpasswordForm
       }).then(function () {
-        return console.log('aa');
+        return window.location.href = '/shopList';
       });
     }
   }

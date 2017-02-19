@@ -40,7 +40,7 @@ object Application extends Controller {
                     Ok(write(resp))
                 }
                 else{
-                    val resp = Response("102", "参数错误", LoginData(false))
+                    val resp = Response("200", "登陆失败", LoginData(false))
                     Ok(write(resp))
                 }
             }
@@ -69,7 +69,8 @@ object Application extends Controller {
         val captcha = (request.body \ "captcha").as[String]
         val password = (request.body \ "password").as[String]
         Future{
-            Ok("test")
+            val resp = Response("200", "注册成功", LoginData(true))
+            Ok(write(resp))
         }
     }
 
@@ -77,7 +78,8 @@ object Application extends Controller {
         Random.setSeed(System.currentTimeMillis())
         Future{
             val number = (Random.nextDouble() * scala.math.pow(10, CAPTCHA_SIZE)).toInt
-            Ok(number.toString)
+            val resp = Response("200", "注册成功", LoginData(true))
+            Ok(write(resp))
         }
     }
     /******************  Action end  ******************/

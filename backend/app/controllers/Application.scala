@@ -82,4 +82,8 @@ object Application extends Controller {
     }
     /******************  Action end  ******************/
 
+    def shopList = Action {
+        Ok(html.shop.shop("test1", "test2"))
+    }
+
 }

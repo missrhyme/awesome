@@ -1,0 +1,103 @@
+html,body{
+  height: 100%;
+}
+.login-container{
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url(http://img-arch.pconline.com.cn/images/upload/upc/tx/itbbs/1410/15/c16/39711187_1413383396015.jpg)
+}
+.login-panel{
+  background: rgba(64, 84, 84, .8);
+  border-radius: 5px;
+  width: 400px;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.login-form{
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px 0
+}
+.login-form input{
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  color: #333;
+  display: block;
+  width: 100%;
+  margin: 20px auto;
+  width: 300px;
+  outline: 0
+}
+.login-form input:focus{
+  border-color: #6dbdd0;
+}
+.login-button{
+  color: #fff;
+  width: 320px;
+  height: 35px;
+  line-height: 35px;
+  background: #6dbdd0;
+  border:none;
+  margin: 0 auto;
+  border-radius: 5px;
+  display: block;
+  outline: 0;
+}
+.login-icon{
+  padding: 20px 0;
+  color: #fff;
+  text-align: center;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  width: 150px;
+  margin: 0 auto 20px;
+}
+.login-link{
+  width: 320px;
+  margin: 20px auto 10px;
+}
+.login-link a{
+  text-decoration: none;
+  color: #666;
+  font-size: 12px
+}
+.login-link a:hover{
+  text-decoration: underline;
+}
+.login-footer{
+  color: #fff;
+  margin-top: 15px;
+  text-align: right;
+  font-size: 12px;
+}
+.captcha-button{
+  text-decoration: none;
+  color: #fff;
+  background: #6dbdd0;
+  height: 37px;
+  line-height: 37px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 5px;
+  display: inline-block;
+  float: left;
+  margin-left: 10px;
+  width: 70px;
+}
+.captcha-wrap{
+  padding-left: 20px;
+  height: 37px;
+}
+.captcha-wrap input{
+  width: 220px;
+  float: left;
+  margin: 0
+}
+.captcha-button-disabled{
+  background: #ccc;
+}

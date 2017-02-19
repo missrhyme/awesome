@@ -16,3 +16,6 @@ GET     /api/captcha                  controllers.Application.captcha(mobile: St
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                 controllers.Assets.at(path="/public", file)
 
+# shop
+
+GET /shopList   controllers.Application.shopList

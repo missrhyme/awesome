@@ -1,9 +1,83 @@
 @(str1: String, str2: String)
 
-@main {
-  <link rel="stylesheet" href="/aaa">
-}{
-<p>str2</p>
-}{
-  <script src="localhost:2221/dist/shop/shopList"></script>
-}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/base.css")" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/index/index.css")" />
+    <script src="//unpkg.com/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/element-ui/lib/index.js"></script>
+    <title>amz defend</title>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-panel">
+        <div class="login-icon">Amazon Defender</div>
+        <!-- login -->
+        <form class="login-form" action="/login" v-if="type == 1" @@submit="handleLogin">
+          <input type="text" name="username" placeholder="请输入手机号" v-model="loginForm.username">
+          <input type="password" name="password" placeholder="请输入密码" v-model="loginForm.password">
+          <button type="submit" class="login-button">登录</button>
+          <div class="login-link">
+            <a href="javascript:;" style="margin-right:146px" @@click="changeType(2)">还没有账号？注册账号</a>
+            <a href="javascript:;" @@click="changeType(3)">忘记密码</a>
+          </div>
+        </form>
+
+        <!-- register -->
+        <form class="login-form" action="/register" v-if="type == 2" @@submit="handleRegister">
+          <input type="text" name="username" placeholder="请输入手机号" v-model="registerForm.username">
+          <div class="captcha-wrap">
+            <input type="text" name="password" placeholder="请输入验证码" v-model="registerForm.captcha">
+            <a
+              class="captcha-button"
+              href="javascript:;"
+              @@click="handleCaptcha(registerForm.username)"
+              :class="hasCaptcha ? 'captcha-button-disabled' : ''"
+            >
+              {{hasCaptcha ? '剩余' + timeout + '秒' : '发送验证码'}}
+            </a>
+          </div>
+          <input type="password" name="password" placeholder="请输入密码" v-model="registerForm.password">
+          <input type="password" name="password_repeat" placeholder="请再次输入密码" v-model="registerForm.password_repeat">
+          <button type="submit" class="login-button">注册</button>
+          <div class="login-link">
+            <a href="javascript:;" @@click="changeType(1)" style="margin-right:146px">已有账号？登录</a>
+            <a href="javascript:;" @@click="changeType(3)">忘记密码</a>
+          </div>
+        </form>
+
+        <!-- reset password -->
+        <form class="login-form" action="/resetpassword" v-if="type == 3" @@submit="handleResetpassword">
+          <input type="text" name="username" placeholder="请输入手机号" v-model="resetpasswordForm.username">
+          <div class="captcha-wrap">
+            <input type="text" name="password" placeholder="请输入验证码" v-model="resetpasswordForm.captcha">
+            <a
+              class="captcha-button"
+              href="javascript:;"
+              @@click="handleCaptcha(resetpasswordForm.username)"
+              :class="hasCaptcha ? 'captcha-button-disabled' : ''"
+            >
+              {{hasCaptcha ? '剩余' + timeout + '秒' : '发送验证码'}}
+            </a>
+          </div>
+          <input type="password" name="password" placeholder="请输入新密码" v-model="resetpasswordForm.password">
+          <input type="password" name="password_repeat" placeholder="请再次输入新密码" v-model="resetpasswordForm.password_repeat">
+          <button type="submit" class="login-button">确定</button>
+          <div class="login-link">
+            <a href="javascript:;" @@click="changeType(1)" style="margin-right:146px">已有账号？登录</a>
+          </div>
+        </form>
+        <div class="login-footer">
+          Powered by Sugoi Company
+        </div>
+      </div>
+    </div>
+
+    <script src="@routes.Assets.at("js/account/login.js")"></script>
+  </body>
+</html>

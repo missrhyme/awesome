@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import fetch from '../../utils/fetch';
 
 new Vue({
@@ -12,36 +13,35 @@ new Vue({
 
       loginForm: {
         username: '',
-        password: ''
+        password: '',
       },
 
       registerForm: {
         username: '',
         password: '',
         password_repeat: '',
-        captcha: ''
+        captcha: '',
       },
 
       resetpasswordForm: {
         username: '',
         password: '',
         password_repeat: '',
-        captcha: ''
-      }
-
-    }
+        captcha: '',
+      },
+    };
   },
   methods: {
-    changeType: function(type){
+    changeType(type) {
       this.type = type;
     },
 
-    handleCaptcha (mobile) {
+    handleCaptcha(mobile) {
       if (this.hasCaptcha) return;
       fetch({
         url: '/api/captcha',
         type: 'post',
-        data: {mobile}
+        data: { mobile },
       })
         .then(
           () => {
@@ -56,28 +56,26 @@ new Vue({
                   this.hasCaptcha = false;
                 }
               },
-              1000
+              1000,
             );
-          }
-        )
-
-
+          },
+        );
     },
 
-    handleLogin (e) {
+    handleLogin(e) {
       e.preventDefault();
       fetch({
         url: '/api/login',
         type: 'POST',
-        data: this.loginForm
+        data: this.loginForm,
       })
-      .then( r => {
+      .then((r) => {
         if (r.success) window.location.href = '/shopList';
         else this.$message('用户名或密码错误，请重试。');
-      })
+      });
     },
 
-    handleRegister (e) {
+    handleRegister(e) {
       e.preventDefault();
       fetch({
         url: '/api/register',

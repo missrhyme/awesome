@@ -21,35 +21,33 @@ import request from 'superagent';
   * }
   */
 
- //aaa
-
 export default function fetch({
   url,
   data,
   timeout = 1000,
   type = 'GET',
-  dataType = 'JSON'
+  // dataType = 'JSON'
 }) {
   let quest;
-  if (type == 'POST') {
+  if (type === 'POST') {
     quest = request(type, url)
       .timeout(timeout)
-      .send(data)
+      .send(data);
   } else {
     quest = request
       .get(url)
       .timeout(timeout)
-      .query(data)
+      .query(data);
   }
   return (
     quest
       .then(
-        response => {
+        (response) => {
           const body = response.body || JSON.parse(response.text);
           if (body.status == 200) return body.data;
-          else Promise.reject(body.msg);
+          return Promise.reject(body.msg);
         },
-        err => Promise.reject(err)
+        err => Promise.reject(err),
       )
   );
 }

@@ -284,11 +284,12 @@ detail | 店铺详情
 
 ## commodity
 
-## email template
-  - 5.add new email-template
-  - 6.remove email-template
-  - 7.get email-template-list
-  - 8.get email-template-detail
+## email & SMS template
+- add personal info
+- 5.add new email-template
+- 6.remove email-template
+- 7.get email-template-list
+- 8.get email-template-detail
 
 
 ## SMS template

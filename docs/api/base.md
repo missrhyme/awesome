@@ -1,3 +1,5 @@
+[Email-sms](#email--sms-template)
+
 # 接口基础格式
 
 ```json
@@ -330,6 +332,7 @@ detail | 详情
   },
   "msg" : ""
 }
+```
 
 删除邮件模板 POST /api/mailTemplate/delete
 
@@ -350,7 +353,7 @@ success| 是否成功
   },
   "msg" : ""
 }
-
+```
 
 更新邮件模板 POST /api/mailTemplate/update
 
@@ -378,7 +381,7 @@ success| 是否成功
   },
   "msg" : ""
 }
-
+```
 
 发送测试邮件 POST /api/mailTemplate/test
 
@@ -400,6 +403,7 @@ success| 是否成功
   },
   "msg" : ""
 }
+```
 
 
 ## SMS template
@@ -447,6 +451,7 @@ detail | 详情
   },
   "msg" : ""
 }
+```
 
 删除短信模板 POST /api/SMSTemplate/delete
 
@@ -467,6 +472,7 @@ success| 是否成功
   },
   "msg" : ""
 }
+```
 
 
 更新短信模板 POST /api/SMSTemplate/update
@@ -495,3 +501,4 @@ success| 是否成功
   },
   "msg" : ""
 }
+```

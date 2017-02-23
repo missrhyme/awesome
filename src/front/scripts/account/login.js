@@ -80,22 +80,22 @@ new Vue({
       fetch({
         url: '/api/register',
         type: 'POST',
-        data: this.registerForm
+        data: this.registerForm,
       })
       .then(
          () => window.location.href = '/shopList',
-         () => this.$message('注册失败，请重试。')
-      )
+         () => this.$message('注册失败，请重试。'),
+      );
     },
 
-    handleResetpassword (e) {
+    handleResetpassword(e) {
       e.preventDefault();
       fetch({
         url: '/api/resetpassword',
         type: 'POST',
-        data: this.resetpasswordForm
+        data: this.resetpasswordForm,
       })
-      .then( () => window.location.href = '/shopList')
-    }
-  }
-})
+      .then(() => window.location.href = '/shopList');
+    },
+  },
+});

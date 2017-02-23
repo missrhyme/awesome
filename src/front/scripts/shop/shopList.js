@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 const defaultForm = {
   name: '',
   account: '',
@@ -5,27 +7,27 @@ const defaultForm = {
   access: '',
   secret: '',
   seller: '',
-  marketplace: ''
-}
+  marketplace: '',
+};
 
 new Vue({
   el: '#app',
-  data () {
+  data() {
     return {
       // 店铺列表
       list: [
         {
-         "id": "10000",
-         "name": "很厉害的店铺",
-         "status": 1,
-         "token": true
+          id: '10000',
+          name: '很厉害的店铺',
+          status: 1,
+          token: true,
         },
         {
-         "id": "10001",
-         "name": "很厉害的店铺2",
-         "status": 0,
-         "token": true
-        }
+          id: '10001',
+          name: '很厉害的店铺2',
+          status: 1,
+          token: true,
+        },
       ],
 
       // 新建/编辑是否打开
@@ -34,8 +36,8 @@ new Vue({
       // 是否为编辑状态
       isEdit: false,
 
-      form: defaultForm
-    }
+      form: defaultForm,
+    };
   },
 
   methods: {
@@ -44,16 +46,16 @@ new Vue({
       this.$confirm(`确认停用店铺${item.name}？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       }).then(() => {
         this.$message({
           type: 'success',
-          message: '停用成功!'
+          message: '停用成功!',
         });
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消停用'
+          message: '已取消停用',
         });
       });
     },
@@ -63,16 +65,16 @@ new Vue({
       this.$confirm(`确认删除店铺${item.name}？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       }).then(() => {
         this.$message({
           type: 'success',
-          message: '删除成功!'
+          message: '删除成功!',
         });
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: '已取消删除',
         });
       });
     },
@@ -81,17 +83,17 @@ new Vue({
     handleEdit(item) {
       // get value here
       const data = {
-         "id": "10000",
-         "name": "很厉害的店铺",
-         "status": 1,
-         "token": true,
-         "account": "moemoe@163.com",
-         "type": 1,
-         "access": "testAccessKey",
-         "secret": "testSecretKey",
-         "seller": "AED2FSFS823",
-         "marketplace": "SADF82317313"
-      };
+        id: '10000',
+        name: '很厉害的店铺',
+        status: 1,
+        token: true,
+        account: 'moemoe@163.com',
+        type: 1,
+        access: 'testAccessKey',
+        secret: 'testSecretKey',
+        seller: 'AED2FSFS823',
+        marketplace: 'SADF82317313',
+      } || item;
       this.form = data;
       this.isEdit = true;
       this.dialogOpen = true;
@@ -105,7 +107,7 @@ new Vue({
     },
 
     handleCurrentChange(val) {
-      console.log(val);
-    }
-  }
-})
+      console.log(val); // eslint-disable-line
+    },
+  },
+});

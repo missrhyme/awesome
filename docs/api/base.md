@@ -286,14 +286,212 @@ detail | 店铺详情
 
 ## email & SMS template
 - add personal info
-- 5.add new email-template
-- 6.remove email-template
-- 7.get email-template-list
-- 8.get email-template-detail
+
+获取邮件关键字 打印在页面上
+
+
+示例：
+```json
+ [
+   {
+     "value": "{buyer}",
+     "label": "买家姓名",
+   },
+   {
+     "value": "{seller}",
+     "label": "卖家姓名",
+   }
+ ]
+```
+
+新增邮件模板 POST /api/mailTemplate/add
+
+request| detail
+-----|------
+name| 模板名称
+content | 内容
+
+response| detail
+-----|------
+success| 是否成功
+detail | 详情
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+     "success": true,
+     "detail":{
+       "id": "10000",
+       "name": "很厉害的店铺",
+       "content": "你好{buyer}，再见{seller}"
+     }
+  },
+  "msg" : ""
+}
+
+删除邮件模板 POST /api/mailTemplate/delete
+
+request| detail
+-----|------
+id| 模板ID
+
+response| detail
+-----|------
+success| 是否成功
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+     "success": true
+  },
+  "msg" : ""
+}
+
+
+更新邮件模板 POST /api/mailTemplate/update
+
+request| detail
+-----|------
+id| 模板ID
+name| 模板名称
+content | 内容
+
+response| detail
+-----|------
+success| 是否成功
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+     "success": true,
+     "detail":{
+       "id": "10000",
+       "name": "很厉害的店铺",
+       "content": "你好{buyer}，再见{seller}"
+     }
+  },
+  "msg" : ""
+}
+
+
+发送测试邮件 POST /api/mailTemplate/test
+
+request| detail
+-----|------
+email| 目标email
+id| 模板id
+
+response| detail
+-----|------
+success| 是否成功
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+     "success": true
+  },
+  "msg" : ""
+}
 
 
 ## SMS template
-  - 5.add new SMS-template
-  - 6.remove SMS-template
-  - 7.get SMS-template-list
-  - 8.get SMS-template-detail
+
+获取短信关键字 打印在页面上
+
+
+示例：
+```json
+ [
+   {
+     "value": "{buyer}",
+     "label": "买家姓名",
+   },
+   {
+     "value": "{seller}",
+     "label": "卖家姓名",
+   }
+ ]
+```
+
+新增短信模板 POST /api/SMSTemplate/add
+
+request| detail
+-----|------
+name| 模板名称
+content | 内容
+
+response| detail
+-----|------
+success| 是否成功
+detail | 详情
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+     "success": true,
+     "detail":{
+       "id": "10000",
+       "name": "很厉害的店铺",
+       "content": "你好{buyer}，再见{seller}"
+     }
+  },
+  "msg" : ""
+}
+
+删除短信模板 POST /api/SMSTemplate/delete
+
+request| detail
+-----|------
+id| 模板ID
+
+response| detail
+-----|------
+success| 是否成功
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+     "success": true
+  },
+  "msg" : ""
+}
+
+
+更新短信模板 POST /api/SMSTemplate/update
+
+request| detail
+-----|------
+id| 模板ID
+name| 模板名称
+content | 内容
+
+response| detail
+-----|------
+success| 是否成功
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+     "success": true,
+     "detail":{
+       "id": "10000",
+       "name": "很厉害的店铺",
+       "content": "你好{buyer}，再见{seller}"
+     }
+  },
+  "msg" : ""
+}

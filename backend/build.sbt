@@ -12,8 +12,9 @@ libraryDependencies ++= Seq(
     ws,
     jdbc,
     "mysql" % "mysql-connector-java" % "5.1.24",
-    "org.json4s" %% "json4s-native" % "3.3.0",
-    "org.json4s" %% "json4s-jackson" % "3.3.0"
+    "com.github.tototoshi" %% "play-json4s-native" % "0.4.2",
+    "com.github.tototoshi" %% "play-json4s-test-native" % "0.4.2" % "test",
+    "com.typesafe.play" %% "play-mailer" % "4.0.0"
 )
 
 lazy val root = (project in file("."))

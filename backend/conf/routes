@@ -3,19 +3,34 @@
 # ~~~~
 
 # Default path will just redirect to the computer list
-GET     /                             controllers.Application.index
+# Login
+GET     /                             @controllers.Application.index
 
-POST    /api/login                    controllers.Application.login
+POST    /api/login                    @controllers.Application.login
 
-POST    /api/register                 controllers.Application.register
+POST    /api/register                 @controllers.Application.register
 
-POST    /api/resetpassword            controllers.Application.resetpassword
+POST    /api/resetpassword            @controllers.Application.resetpassword
 
-GET     /api/captcha                  controllers.Application.captcha(mobile: String)
-
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file                 controllers.Assets.at(path="/public", file)
+GET     /api/captcha                  @controllers.Application.captcha(mobile: String)
 
 # shop
+GET     /api/shop/list                @controllers.Application.shopList(page: Int ?= 1)
 
-GET /shopList   controllers.Application.shopList
+POST    /api/shop/add                 @controllers.Application.shopAdd
+
+POST    /api/shop/remove              @controllers.Application.shopRemove
+
+GET     /api/shop/detail              @controllers.Application.shopDetail(id: Int)
+
+POST    /api/shop/update              @controllers.Application.shopUpdate
+
+# template
+POST    /api/mailTemplate/add         @controllers.Application.mailAdd
+
+GET     /test                         @controllers.Application.test
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                 @controllers.Assets.at(path="/public", file)
+
+

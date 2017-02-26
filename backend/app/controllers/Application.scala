@@ -321,6 +321,18 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
         }
     }
 
+    /** ****************  Shop end  ******************/
+
+    /** ****************  Mail begin  ******************/
+
+    def mailTemplate = Action { request =>
+        Ok(html.tmpl.mail("test1", "test2"))
+    }
+
+    def smsTemplate = Action { request =>
+        Ok(html.tmpl.sms("test1", "test2"))
+    }
+
 
     def mailAdd = Action.async(json) { implicit request =>
         Future {

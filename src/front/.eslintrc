@@ -3,5 +3,9 @@
   "rules": {
     "eqeqeq": 0,
     "no-new": 0
+  },
+  "env": {
+    "browser": true,
+    "node": true
   }
 }

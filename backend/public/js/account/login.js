@@ -63,11 +63,17 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = Vue;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 /**
@@ -86,7 +92,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97,7 +103,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = fetch;
 
-var _superagent = __webpack_require__(3);
+var _superagent = __webpack_require__(4);
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
@@ -123,34 +129,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * }
  */
 
-//aaa
-
 function fetch(_ref) {
   var url = _ref.url,
       data = _ref.data,
       _ref$timeout = _ref.timeout,
       timeout = _ref$timeout === undefined ? 1000 : _ref$timeout,
       _ref$type = _ref.type,
-      type = _ref$type === undefined ? 'GET' : _ref$type,
-      _ref$dataType = _ref.dataType,
-      dataType = _ref$dataType === undefined ? 'JSON' : _ref$dataType;
+      type = _ref$type === undefined ? 'GET' : _ref$type;
 
   var quest = void 0;
-  if (type == 'POST') {
+  if (type === 'POST') {
     quest = (0, _superagent2.default)(type, url).timeout(timeout).send(data);
   } else {
     quest = _superagent2.default.get(url).timeout(timeout).query(data);
   }
   return quest.then(function (response) {
     var body = response.body || JSON.parse(response.text);
-    if (body.status == 200) return body.data;else Promise.reject(body.msg);
+    if (body.status == 200) return body.data;
+    return Promise.reject(body.msg);
   }, function (err) {
     return Promise.reject(err);
   });
 }
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -319,7 +322,7 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -336,12 +339,12 @@ if (typeof window !== 'undefined') { // Browser window
   root = this;
 }
 
-var Emitter = __webpack_require__(2);
-var RequestBase = __webpack_require__(5);
-var isObject = __webpack_require__(0);
-var isFunction = __webpack_require__(4);
-var ResponseBase = __webpack_require__(6);
-var shouldRetry = __webpack_require__(7);
+var Emitter = __webpack_require__(3);
+var RequestBase = __webpack_require__(6);
+var isObject = __webpack_require__(1);
+var isFunction = __webpack_require__(5);
+var ResponseBase = __webpack_require__(7);
+var shouldRetry = __webpack_require__(8);
 
 /**
  * Noop.
@@ -1256,7 +1259,7 @@ request.put = function(url, data, fn){
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -1266,7 +1269,7 @@ request.put = function(url, data, fn){
  * @return {Boolean}
  * @api private
  */
-var isObject = __webpack_require__(0);
+var isObject = __webpack_require__(1);
 
 function isFunction(fn) {
   var tag = isObject(fn) ? Object.prototype.toString.call(fn) : '';
@@ -1277,13 +1280,13 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module of mixed-in functions shared between node and client code
  */
-var isObject = __webpack_require__(0);
+var isObject = __webpack_require__(1);
 
 /**
  * Expose `RequestBase`.
@@ -1867,7 +1870,7 @@ RequestBase.prototype._setTimeouts = function() {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -1875,7 +1878,7 @@ RequestBase.prototype._setTimeouts = function() {
  * Module dependencies.
  */
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(9);
 
 /**
  * Expose `ResponseBase`.
@@ -2006,7 +2009,7 @@ ResponseBase.prototype._setStatusProperties = function(status){
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 var ERROR_CODES = [
@@ -2033,7 +2036,7 @@ module.exports = function shouldRetry(err, res) {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 
@@ -2106,19 +2109,23 @@ exports.cleanHeader = function(header, shouldStripCookie){
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _fetch = __webpack_require__(1);
+var _vue = __webpack_require__(0);
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _fetch = __webpack_require__(2);
 
 var _fetch2 = _interopRequireDefault(_fetch);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-new Vue({
+new _vue2.default({
   el: '.login-container',
   data: function data() {
     return {
@@ -2146,7 +2153,6 @@ new Vue({
         password_repeat: '',
         captcha: ''
       }
-
     };
   },
 
@@ -2154,7 +2160,6 @@ new Vue({
     changeType: function changeType(type) {
       this.type = type;
     },
-
     handleCaptcha: function handleCaptcha(mobile) {
       var _this = this;
 

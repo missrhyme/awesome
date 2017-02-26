@@ -63,16 +63,29 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
+/***/ 0:
+/***/ (function(module, exports) {
+
+module.exports = Vue;
+
+/***/ }),
+
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var _vue = __webpack_require__(0);
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultForm = {
   name: '',
@@ -84,21 +97,21 @@ var defaultForm = {
   marketplace: ''
 };
 
-new Vue({
+new _vue2.default({
   el: '#app',
   data: function data() {
     return {
       // 店铺列表
       list: [{
-        "id": "10000",
-        "name": "很厉害的店铺",
-        "status": 1,
-        "token": true
+        id: '10000',
+        name: '很厉害的店铺',
+        status: 1,
+        token: true
       }, {
-        "id": "10001",
-        "name": "很厉害的店铺2",
-        "status": 0,
-        "token": true
+        id: '10001',
+        name: '很厉害的店铺2',
+        status: 1,
+        token: true
       }],
 
       // 新建/编辑是否打开
@@ -161,17 +174,17 @@ new Vue({
     handleEdit: function handleEdit(item) {
       // get value here
       var data = {
-        "id": "10000",
-        "name": "很厉害的店铺",
-        "status": 1,
-        "token": true,
-        "account": "moemoe@163.com",
-        "type": 1,
-        "access": "testAccessKey",
-        "secret": "testSecretKey",
-        "seller": "AED2FSFS823",
-        "marketplace": "SADF82317313"
-      };
+        id: '10000',
+        name: '很厉害的店铺',
+        status: 1,
+        token: true,
+        account: 'moemoe@163.com',
+        type: 1,
+        access: 'testAccessKey',
+        secret: 'testSecretKey',
+        seller: 'AED2FSFS823',
+        marketplace: 'SADF82317313'
+      } || item;
       this.form = data;
       this.isEdit = true;
       this.dialogOpen = true;
@@ -185,7 +198,7 @@ new Vue({
       this.dialogOpen = true;
     },
     handleCurrentChange: function handleCurrentChange(val) {
-      console.log(val);
+      console.log(val); // eslint-disable-line
     }
   }
 });

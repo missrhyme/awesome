@@ -1,0 +1,86 @@
+@(str1: String, str2: String)
+
+@main {
+  
+}{
+  <div style="padding: 20px; position: relative">
+    <h2 class="title">短信模板列表</h2>
+    <el-button type="primary" @@click="handleCreate" icon="plus" style="position: absolute; right: 20px; top:20px">新增</el-button>
+    <el-table
+      :data="list"
+      stripe
+      style="width: 100%">
+      <el-table-column
+        prop="name"
+        label="模板名称"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="content"
+        label="内容">
+      </el-table-column>
+      <el-table-column
+        prop=""
+        label="操作"
+        width="200">
+        <template scope="scope">
+          <el-button type="primary" size="small" @@click="handleEdit(scope.row)">编辑</el-button>
+          <el-button type="danger" size="small" @@click="handleDelete(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+     <el-dialog title="新增短信模板" v-model="dialogOpen">
+       <div style="margin: 0 auto; width: 600px">
+         <el-form :model="form">
+           <el-form-item label="邮件关键字" :label-width="'160px'">
+             <el-button
+               v-for="item in keywords"
+               size="small"
+               @@click="handleKeywords(item)"
+              >{{item.label}} - {{item.value}}</el-button>
+           </el-form-item>
+           <el-form-item label="模板名称" :label-width="'160px'">
+             <el-input v-model="form.name" auto-complete="off"></el-input>
+           </el-form-item>
+           <el-form-item label="内容" :label-width="'160px'">
+             <el-input type="textarea" v-model="form.content" auto-complete="off" id="content-area"></el-input>
+           </el-form-item>
+         </el-form>
+         <div slot="footer" class="dialog-footer" style="padding-left: 160px">
+           <el-button type="primary" @@click="handleSubmit">确 定</el-button>
+           <el-button @@click="dialogOpen = false">取 消</el-button>
+         </div>
+       </div>
+     </el-dialog>
+  </div>
+}{
+  <script src="@routes.Assets.at("js/tmpl/mail.js")"></script>
+  <script>
+    window.pageInit({
+      pageType: 'SMS',
+      keywords: [
+        {
+          "value": "{buyer}",
+          "label": "买家姓名",
+        },
+        {
+          "value": "{seller}",
+          "label": "卖家姓名",
+        }
+      ],
+      list: [
+        {
+          "id": '10000',
+          "name": "很厉害的短信模板",
+          "content": "你好{buyer}，再见{seller}"
+        },
+        {
+          "id": '10001',
+          "name": "很厉害的短信模板22",
+          "content": "你好{buyer}，再见{seller}"
+        }
+      ]
+    })
+  </script>
+}

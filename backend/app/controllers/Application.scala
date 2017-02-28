@@ -41,14 +41,17 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
                 state.setString(2, login.password)
                 val rs = state.executeQuery()
                 rs.next()
-                val count = rs.getInt("cnt")
-                if (count == 1) {
+                if (rs.getInt("cnt") == 1) {
+                    rs.next()
                     val resp =
                         ("status" -> 200) ~
                             ("data" ->
                                 ("success" -> true)) ~
                             ("msg" -> "登陆成功")
-                    Ok(compact(renderJson(resp))).withSession(request.session + ("login" -> login.username))
+                    Ok(compact(renderJson(resp)))
+                        .withSession((request.session +
+                            ("login_name" -> login.username)) +
+                            ("login_id" -> rs.getInt("user_id").toString))
                 }
                 else {
                     val resp =
@@ -109,28 +112,26 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
     /** ****************  Shop begin  ******************/
 
     def shopList(page: Int) = Action.async { implicit request =>
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
         Future {
-            request.session.get("login").map { user =>
-                DB.withConnection { conn =>
-                    val result = ListBuffer.empty[ShopItem]
-                    val sql = "select * as cnt from shop where username=? order by shop_id"
-                    val state = conn.prepareStatement(sql)
-                    state.setString(1, user)
-                    val rs = state.executeQuery()
-                    while (rs.next()) {
-                        result += ShopItem(rs.getInt("shop_id"), rs.getString("name"), rs.getInt("status"), true)
-                    }
-                    val resp =
-                        result.toList.map { shop =>
-                            ("id" -> shop.id) ~
-                                ("name" -> shop.name) ~
-                                ("status" -> shop.status) ~
-                                ("token" -> shop.token)
-                        }
-                    Ok(compact(renderJson(resp)))
+            DB.withConnection { conn =>
+                val result = ListBuffer.empty[ShopItem]
+                val sql = "select * from shop where user_id=? order by shop_id"
+                val state = conn.prepareStatement(sql)
+                state.setInt(1, loginId)
+                val rs = state.executeQuery()
+                while (rs.next()) {
+                    result += ShopItem(rs.getInt("shop_id"), rs.getString("name"), rs.getInt("status"), true)
                 }
-            }.getOrElse {
-                Unauthorized("Oops, you did not login")
+                val resp =
+                    result.toList.map { shop =>
+                        ("id" -> shop.id) ~
+                            ("name" -> shop.name) ~
+                            ("status" -> shop.status) ~
+                            ("token" -> shop.token)
+                    }
+                Ok(compact(renderJson(resp)))
             }
         }
     }
@@ -138,16 +139,18 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
     def shopAdd = Action.async(json) { implicit request =>
         val shop = request.body.extract[ShopAdd]
         val initStatus = 1
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
         Future {
             DB.withConnection { conn =>
-                var sql = "select count(*) as cnt from shop where name=? and username=?"
+                var sql = "select count(*) as cnt from shop where name=? and user_id=?"
                 var state = conn.prepareStatement(sql)
                 state.setString(1, shop.name)
-                state.setString(2, shop.account)
+                state.setInt(2, loginId)
                 val rs = state.executeQuery()
                 rs.next()
                 val count = rs.getInt("cnt")
-                if (count == 1) {
+                if (count > 0) {
                     val resp =
                         ("status" -> 200) ~
                             ("data" ->
@@ -155,21 +158,22 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
                             ("msg" -> "店铺重复")
                     Ok(compact(renderJson(resp))).withSession(request.session)
                 } else {
-                    sql = "insert into shop values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    sql = "insert into shop values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     state = conn.prepareStatement(sql)
-                    state.setString(1, shop.name)
-                    state.setString(2, shop.account)
-                    state.setString(3, shop.access)
-                    state.setString(4, shop.secret)
-                    state.setString(5, shop.seller)
-                    state.setString(6, shop.marketplace)
-                    state.setInt(7, shop.`type`)
-                    state.setInt(8, initStatus)
+                    state.setInt(1, loginId)
+                    state.setString(2, shop.name)
+                    state.setString(3, shop.account)
+                    state.setString(4, shop.access)
+                    state.setString(5, shop.secret)
+                    state.setString(6, shop.seller)
+                    state.setString(7, shop.marketplace)
+                    state.setInt(8, shop.`type`)
+                    state.setInt(9, initStatus)
                     state.executeUpdate()
-                    sql = "select * as cnt from shop where name=? and username=?"
+                    sql = "select * from shop where name=? and user_id=?"
                     state = conn.prepareStatement(sql)
                     state.setString(1, shop.name)
-                    state.setString(2, shop.account)
+                    state.setInt(2, loginId)
                     val rs = state.executeQuery()
                     rs.next()
                     val shopId = rs.getInt("shop_id")
@@ -198,11 +202,14 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
 
     def shopRemove = Action.async(json) { implicit request =>
         val shop = request.body.extract[ShopRemove]
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
         Future {
             DB.withConnection { conn =>
-                var sql = "select count(*) as cnt from shop where shop_id=?"
+                var sql = "select count(*) as cnt from shop where shop_id=? and user_id=?"
                 var state = conn.prepareStatement(sql)
                 state.setInt(1, shop.id)
+                state.setInt(2, loginId)
                 val rs = state.executeQuery()
                 rs.next()
                 val count = rs.getInt("cnt")
@@ -230,13 +237,23 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
     }
 
     def shopDetail(id: Int) = Action.async { request =>
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
         Future {
             DB.withConnection { conn =>
-                val sql = "select * as cnt from shop where shop_id=?"
-                val state = conn.prepareStatement(sql)
+                var sql = "select count(*) as cnt from shop where shop_id=? and user_id=?"
+                var state = conn.prepareStatement(sql)
                 state.setInt(1, id)
+                state.setInt(2, loginId)
                 val rs = state.executeQuery()
-                if (rs.getRow == 1) {
+                rs.next()
+                if (rs.getInt("cnt") == 1) {
+                    sql = "select * from shop where shop_id=? and user_id=?"
+                    state = conn.prepareStatement(sql)
+                    state.setInt(1, id)
+                    state.setInt(2, loginId)
+                    val rs = state.executeQuery()
+                    rs.next()
                     val resp =
                         ("status" -> 200) ~
                             ("data" ->
@@ -269,11 +286,14 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
 
     def shopUpdate = Action.async(json) { implicit request =>
         val shop = request.body.extract[ShopUpdate]
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
         Future {
             DB.withConnection { conn =>
-                var sql = "select count(*) as cnt from shop where shop_id=?"
+                var sql = "select count(*) as cnt from shop where shop_id=? and user_id=?"
                 var state = conn.prepareStatement(sql)
                 state.setInt(1, shop.id)
+                state.setInt(2, loginId)
                 val rs = state.executeQuery()
                 rs.next()
                 val count = rs.getInt("cnt")
@@ -294,21 +314,19 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
                             ("data" ->
                                 ("success" -> true) ~
                                     ("detail" ->
-                                        ("id" -> rs.getInt("shop_id")) ~
-                                            ("name" -> rs.getString("name")) ~
-                                            ("status" -> rs.getInt("status")) ~
+                                        ("id" -> shop.id) ~
+                                            ("name" -> shop.name) ~
+                                            ("status" -> shop.status) ~
                                             ("token" -> true) ~
-                                            ("account" -> rs.getString("account")) ~
-                                            ("type" -> rs.getInt("type")) ~
-                                            ("access" -> rs.getString("access")) ~
-                                            ("secret" -> rs.getString("secret")) ~
-                                            ("seller" -> rs.getString("seller")) ~
-                                            ("marketplace" -> rs.getString("marketplace"))
+                                            ("account" -> shop.account) ~
+                                            ("type" -> shop.`type`) ~
+                                            ("access" -> shop.access) ~
+                                            ("secret" -> shop.secret) ~
+                                            ("seller" -> shop.seller) ~
+                                            ("marketplace" -> shop.marketplace)
                                         )) ~
-                            ("msg" -> "查询成功")
+                            ("msg" -> "更新成功")
                     Ok(compact(renderJson(resp))).withSession(request.session)
-
-                    Ok("test")
                 } else {
                     val resp =
                         ("status" -> 200) ~

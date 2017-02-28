@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import fetch from '../../utils/fetch';
 
 const defaultForm = {
   name: '',
@@ -10,25 +11,14 @@ const defaultForm = {
   marketplace: '',
 };
 
-new Vue({
+window.pageInit = ({
+  list = [],
+}) => new Vue({
   el: '#app',
   data() {
     return {
       // 店铺列表
-      list: [
-        {
-          id: '10000',
-          name: '很厉害的店铺',
-          status: 1,
-          token: true,
-        },
-        {
-          id: '10001',
-          name: '很厉害的店铺2',
-          status: 1,
-          token: true,
-        },
-      ],
+      list,
 
       // 新建/编辑是否打开
       dialogOpen: false,
@@ -47,12 +37,24 @@ new Vue({
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-      }).then(() => {
+      })
+      .then(() => {
+        fetch({
+          url: '/api/shop/update',
+          type: 'POST',
+          data: {
+            id: item.id,
+            status: 0,
+          },
+        });
+      })
+      .then(() => {
         this.$message({
           type: 'success',
           message: '停用成功!',
         });
-      }).catch(() => {
+      })
+      .catch(() => {
         this.$message({
           type: 'info',
           message: '已取消停用',
@@ -66,7 +68,15 @@ new Vue({
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-      }).then(() => {
+      })
+      .then(() => {
+        fetch({
+          url: '/api/shop/remove',
+          type: 'POST',
+          data: { id: item.id },
+        });
+      })
+      .then(() => {
         this.$message({
           type: 'success',
           message: '删除成功!',
@@ -81,29 +91,55 @@ new Vue({
 
     // 编辑
     handleEdit(item) {
-      // get value here
-      const data = {
-        id: '10000',
-        name: '很厉害的店铺',
-        status: 1,
-        token: true,
-        account: 'moemoe@163.com',
-        type: 1,
-        access: 'testAccessKey',
-        secret: 'testSecretKey',
-        seller: 'AED2FSFS823',
-        marketplace: 'SADF82317313',
-      } || item;
-      this.form = data;
-      this.isEdit = true;
-      this.dialogOpen = true;
+      fetch({
+        url: '/api/shop/detail',
+        data: { id: item.id },
+      })
+      .then(
+        (res) => {
+          this.form = res;
+          this.isEdit = true;
+          this.dialogOpen = true;
+        },
+      );
     },
 
-    // 新建
+    // 新建窗口
     handleCreate() {
       this.form = defaultForm;
       this.isEdit = false;
       this.dialogOpen = true;
+    },
+
+    handleConfirm() {
+      if (this.isEdit) this.handleEditSubmit();
+      else this.handleCreateSubmit();
+    },
+
+    handleCreateSubmit() {
+      fetch({
+        url: '/api/shop/add',
+        type: 'POST',
+        data: this.form,
+      })
+      .then(
+        (r) => {
+          if (r.success) this.$message('新建成功');
+        },
+      );
+    },
+
+    handleEditSubmit() {
+      fetch({
+        url: '/api/shop/update',
+        type: 'POST',
+        data: this.form,
+      })
+      .then(
+        (r) => {
+          if (r.success) this.$message('编辑成功');
+        },
+      );
     },
 
     handleCurrentChange(val) {

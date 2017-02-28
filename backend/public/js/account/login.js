@@ -70,12 +70,6 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-module.exports = Vue;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
 /**
  * Check if `obj` is an object.
  *
@@ -92,7 +86,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -151,6 +145,12 @@ function fetch(_ref) {
     return Promise.reject(err);
   });
 }
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+module.exports = Vue;
 
 /***/ }),
 /* 3 */
@@ -341,7 +341,7 @@ if (typeof window !== 'undefined') { // Browser window
 
 var Emitter = __webpack_require__(3);
 var RequestBase = __webpack_require__(6);
-var isObject = __webpack_require__(1);
+var isObject = __webpack_require__(0);
 var isFunction = __webpack_require__(5);
 var ResponseBase = __webpack_require__(7);
 var shouldRetry = __webpack_require__(8);
@@ -1269,7 +1269,7 @@ request.put = function(url, data, fn){
  * @return {Boolean}
  * @api private
  */
-var isObject = __webpack_require__(1);
+var isObject = __webpack_require__(0);
 
 function isFunction(fn) {
   var tag = isObject(fn) ? Object.prototype.toString.call(fn) : '';
@@ -1286,7 +1286,7 @@ module.exports = isFunction;
 /**
  * Module of mixed-in functions shared between node and client code
  */
-var isObject = __webpack_require__(1);
+var isObject = __webpack_require__(0);
 
 /**
  * Expose `RequestBase`.
@@ -2115,11 +2115,11 @@ exports.cleanHeader = function(header, shouldStripCookie){
 "use strict";
 
 
-var _vue = __webpack_require__(0);
+var _vue = __webpack_require__(2);
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _fetch = __webpack_require__(2);
+var _fetch = __webpack_require__(1);
 
 var _fetch2 = _interopRequireDefault(_fetch);
 
@@ -2190,7 +2190,12 @@ new _vue2.default({
         type: 'POST',
         data: this.loginForm
       }).then(function (r) {
-        if (r.success) window.location.href = '/shopList';else _this2.$message('用户名或密码错误，请重试。');
+        if (r.success) {
+          window.location.href = '/shopList';
+        } else {
+          _this2.loginForm.password = '';
+          _this2.$message('用户名或密码错误，请重试。');
+        }
       });
     },
     handleRegister: function handleRegister(e) {

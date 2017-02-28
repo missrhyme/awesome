@@ -70,8 +70,12 @@ new Vue({
         data: this.loginForm,
       })
       .then((r) => {
-        if (r.success) window.location.href = '/shopList';
-        else this.$message('用户名或密码错误，请重试。');
+        if (r.success) {
+          window.location.href = '/shopList';
+        } else {
+          this.loginForm.password = '';
+          this.$message('用户名或密码错误，请重试。');
+        }
       });
     },
 

@@ -12,8 +12,8 @@ case class ShopAdd(name: String, account: String, `type`: Int, access: String, s
 case class ShopUpdate(id: Int, name: String, status: Int, account: String, `type`: Int, access: String, secret: String, seller: String, marketplace: String)
 case class ShopRemove(id: Int)
 case class ShopItem(id: Int, name: String, status: Int, token: Boolean)
-// mail template
+// template
 case class MailAdd(name: String, content: String)
-
+case class SMSAdd(name: String, content: String)
 
 

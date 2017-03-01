@@ -359,8 +359,102 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
 
 
     def mailAdd = Action.async(json) { implicit request =>
+        val mail = request.body.extract[MailAdd]
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
         Future {
-            Ok("test")
+            DB.withConnection { conn =>
+                var sql = "select count(*) as cnt from mail_template where name=? and user_id=?"
+                var state = conn.prepareStatement(sql)
+                state.setString(1, mail.name)
+                state.setInt(2, loginId)
+                val rs = state.executeQuery()
+                rs.next()
+                val count = rs.getInt("cnt")
+                if (count == 0) {
+                    sql = "insert into mail_template values (NULL, ?, ?, ?)"
+                    state = conn.prepareStatement(sql)
+                    state.setInt(1, loginId)
+                    state.setString(2, mail.name)
+                    state.setString(3, mail.content)
+                    state.executeUpdate()
+                    sql = "select * from mail_template where name=? and user_id=?"
+                    state = conn.prepareStatement(sql)
+                    state.setString(1, mail.name)
+                    state.setInt(2, loginId)
+                    val rs = state.executeQuery()
+                    rs.next()
+                    val mailId = rs.getInt("mail_id")
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> true) ~
+                                    ("detail" ->
+                                        ("id" -> mailId) ~
+                                            ("name" -> mail.name) ~
+                                            ("content" -> mail.content)
+                                        )) ~
+                            ("msg" -> "添加成功")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                } else {
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> false)) ~
+                            ("msg" -> "添加失败")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                }
+            }
+        }
+    }
+
+    def smsAdd = Action.async(json) { implicit request =>
+        val sms = request.body.extract[SMSAdd]
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
+        Future {
+            DB.withConnection { conn =>
+                var sql = "select count(*) as cnt from sms_template where name=? and user_id=?"
+                var state = conn.prepareStatement(sql)
+                state.setString(1, sms.name)
+                state.setInt(2, loginId)
+                val rs = state.executeQuery()
+                rs.next()
+                val count = rs.getInt("cnt")
+                if (count == 0) {
+                    sql = "insert into sms_template values (NULL, ?, ?, ?)"
+                    state = conn.prepareStatement(sql)
+                    state.setInt(1, loginId)
+                    state.setString(2, sms.name)
+                    state.setString(3, sms.content)
+                    state.executeUpdate()
+                    sql = "select * from sms_template where name=? and user_id=?"
+                    state = conn.prepareStatement(sql)
+                    state.setString(1, sms.name)
+                    state.setInt(2, loginId)
+                    val rs = state.executeQuery()
+                    rs.next()
+                    val smsId = rs.getInt("sms_id")
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> true) ~
+                                    ("detail" ->
+                                        ("id" -> smsId) ~
+                                            ("name" -> sms.name) ~
+                                            ("content" -> sms.content)
+                                        )) ~
+                            ("msg" -> "添加成功")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                } else {
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> false)) ~
+                            ("msg" -> "添加失败")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                }
+            }
         }
     }
 

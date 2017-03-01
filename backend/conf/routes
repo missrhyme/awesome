@@ -32,6 +32,8 @@ GET     /smsTemplate                  @controllers.Application.smsTemplate
 
 POST    /api/mailTemplate/add         @controllers.Application.mailAdd
 
+POST    /api/smsTemplate/add          @controllers.Application.smsAdd
+
 GET     /test                         @controllers.Application.test
 
 # Map static resources from the /public folder to the /assets URL path

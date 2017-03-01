@@ -52,8 +52,8 @@
 
     <el-dialog :title="isEdit ? '编辑店铺' : '新增店铺'" v-model="dialogOpen">
       <div style="margin: 0 auto; width: 600px">
-        <el-form :model="form">
-          <el-form-item label="店铺名称" :label-width="'160px'">
+        <el-form :model="form" :rules="rules" ref="ruleForm">
+          <el-form-item label="店铺名称" :label-width="'160px'" prop="name">
             <el-input v-model="form.name" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="平台账号" :label-width="'160px'">

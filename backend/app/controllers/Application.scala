@@ -113,6 +113,11 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
 
     def shopList(page: Int) = Action.async { implicit request =>
         //val loginName = request.session.get("login_id").head
+
+        // 需要增加页面分页参数 暂时写死 begin
+        val data = Map("page" -> page, "total" -> 10, "pagesize" -> 10)
+        // 暂时写死 end
+
         val loginId = 1
         Future {
             DB.withConnection { conn =>
@@ -131,7 +136,8 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
                             ("status" -> shop.status) ~
                             ("token" -> shop.token)
                     }
-                Ok(compact(renderJson(resp)))
+                val list = compact(renderJson(resp))
+                Ok(html.shop.shop(list, data))
             }
         }
     }

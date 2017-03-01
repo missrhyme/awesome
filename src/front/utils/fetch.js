@@ -24,7 +24,7 @@ import request from 'superagent';
 export default function fetch({
   url,
   data,
-  timeout = 1000,
+  timeout = 10000,
   type = 'GET',
   // dataType = 'JSON'
 }) {

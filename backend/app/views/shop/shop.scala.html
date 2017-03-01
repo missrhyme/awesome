@@ -1,7 +1,7 @@
-@(str1: String, str2: String)
+@(list: String, data: Map[String, Int])
 
 @main {
-  <link rel="stylesheet" href="/aaa">
+
 }{
   <div style="padding: 20px; position: relative">
     <h2 class="title">店铺列表</h2>
@@ -35,8 +35,8 @@
         label="操作">
         <template scope="scope">
           <el-button type="primary" size="small" @@click="handleEdit(scope.row)">编辑</el-button>
-          <el-button type="warning" size="small" @@click="handleStop(scope.row)">停用</el-button>
-          <el-button type="danger" size="small" @@click="handleDelete(scope.row)">删除</el-button>
+          <el-button type="warning" size="small" @@click="handleStop(scope.row, scope.$index)">停用</el-button>
+          <el-button type="danger" size="small" @@click="handleDelete(scope.row, scope.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,9 +44,9 @@
     <el-pagination
       style="margin-top: 20px"
       @@current-change="handleCurrentChange"
-      :current-page="1"
-      :page-size="15"
-      :total="200"
+      :current-page="page"
+      :page-size="pagesize"
+      :total="total"
       layout="prev, pager, next">
      </el-pagination>
 
@@ -89,20 +89,10 @@
   <script src="@routes.Assets.at("js/shop/shopList.js")"></script>
   <script>
     window.pageInit({
-      list: [
-        {
-          id: '10000',
-          name: '很厉害的店铺',
-          status: 1,
-          token: true,
-        },
-        {
-          id: '10001',
-          name: '很厉害的店铺2',
-          status: 1,
-          token: true,
-        },
-      ]
+      list: @Html(list),
+      page: @data.get("page"),
+      pagesize: @data.get("pagesize"),
+      total: @data.get("total")
     });
   </script>
 }

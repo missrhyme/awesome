@@ -127,7 +127,7 @@ function fetch(_ref) {
   var url = _ref.url,
       data = _ref.data,
       _ref$timeout = _ref.timeout,
-      timeout = _ref$timeout === undefined ? 1000 : _ref$timeout,
+      timeout = _ref$timeout === undefined ? 10000 : _ref$timeout,
       _ref$type = _ref.type,
       type = _ref$type === undefined ? 'GET' : _ref$type;
 

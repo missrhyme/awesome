@@ -127,7 +127,7 @@ function fetch(_ref) {
   var url = _ref.url,
       data = _ref.data,
       _ref$timeout = _ref.timeout,
-      timeout = _ref$timeout === undefined ? 1000 : _ref$timeout,
+      timeout = _ref$timeout === undefined ? 10000 : _ref$timeout,
       _ref$type = _ref.type,
       type = _ref$type === undefined ? 'GET' : _ref$type;
 
@@ -2138,13 +2138,25 @@ var defaultForm = {
 
 window.pageInit = function (_ref) {
   var _ref$list = _ref.list,
-      list = _ref$list === undefined ? [] : _ref$list;
+      list = _ref$list === undefined ? [] : _ref$list,
+      _ref$page = _ref.page,
+      page = _ref$page === undefined ? 1 : _ref$page,
+      _ref$pagesize = _ref.pagesize,
+      pagesize = _ref$pagesize === undefined ? 10 : _ref$pagesize,
+      _ref$total = _ref.total,
+      total = _ref$total === undefined ? 10 : _ref$total;
   return new _vue2.default({
     el: '#app',
     data: function data() {
       return {
         // 店铺列表
         list: list,
+
+        page: page,
+
+        pagesize: pagesize,
+
+        total: total,
 
         // 新建/编辑是否打开
         dialogOpen: false,
@@ -2159,7 +2171,7 @@ window.pageInit = function (_ref) {
 
     methods: {
       // 停用
-      handleStop: function handleStop(item) {
+      handleStop: function handleStop(item, index) {
         var _this = this;
 
         this.$confirm('\u786E\u8BA4\u505C\u7528\u5E97\u94FA' + item.name + '\uFF1F', '提示', {
@@ -2174,11 +2186,13 @@ window.pageInit = function (_ref) {
               id: item.id,
               status: 0
             }
-          });
-        }).then(function () {
-          _this.$message({
-            type: 'success',
-            message: '停用成功!'
+          }).then(function (r) {
+            if (r.success) {
+              _this.$message('停用成功');
+              _this.list[index].status = 0;
+            } else {
+              _this.$message('停用失败，请重试');
+            }
           });
         }).catch(function () {
           _this.$message({
@@ -2190,7 +2204,7 @@ window.pageInit = function (_ref) {
 
 
       // 删除
-      handleDelete: function handleDelete(item) {
+      handleDelete: function handleDelete(item, index) {
         var _this2 = this;
 
         this.$confirm('\u786E\u8BA4\u5220\u9664\u5E97\u94FA' + item.name + '\uFF1F', '提示', {
@@ -2202,11 +2216,16 @@ window.pageInit = function (_ref) {
             url: '/api/shop/remove',
             type: 'POST',
             data: { id: item.id }
-          });
-        }).then(function () {
-          _this2.$message({
-            type: 'success',
-            message: '删除成功!'
+          }).then(function (r) {
+            if (r.success) {
+              _this2.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              _this2.list.splice(index, 1);
+            } else {
+              _this2.$message('删除失败，请重试');
+            }
           });
         }).catch(function () {
           _this2.$message({
@@ -2225,9 +2244,13 @@ window.pageInit = function (_ref) {
           url: '/api/shop/detail',
           data: { id: item.id }
         }).then(function (res) {
-          _this3.form = res;
-          _this3.isEdit = true;
-          _this3.dialogOpen = true;
+          if (res.success) {
+            _this3.form = res.detail;
+            _this3.isEdit = true;
+            _this3.dialogOpen = true;
+          } else {
+            _this3.$message('获取店铺信息失败，请重试');
+          }
         });
       },
 
@@ -2249,7 +2272,13 @@ window.pageInit = function (_ref) {
           type: 'POST',
           data: this.form
         }).then(function (r) {
-          if (r.success) _this4.$message('新建成功');
+          if (r.success) {
+            _this4.$message('新建成功');
+            _this4.list.unshift(r.detail);
+            _this4.dialogOpen = false;
+          } else {
+            _this4.$message('新建失败，请重试');
+          }
         });
       },
       handleEditSubmit: function handleEditSubmit() {
@@ -2260,11 +2289,16 @@ window.pageInit = function (_ref) {
           type: 'POST',
           data: this.form
         }).then(function (r) {
-          if (r.success) _this5.$message('编辑成功');
+          if (r.success) {
+            _this5.dialogOpen = false;
+            _this5.$message('编辑成功');
+          } else {
+            _this5.$message('编辑失败，请重试');
+          }
         });
       },
       handleCurrentChange: function handleCurrentChange(val) {
-        console.log(val); // eslint-disable-line
+        location.href = '/shopList/?page=' + val;
       }
     }
   });

@@ -13,12 +13,21 @@ const defaultForm = {
 
 window.pageInit = ({
   list = [],
+  page = 1,
+  pagesize = 10,
+  total = 10,
 }) => new Vue({
   el: '#app',
   data() {
     return {
       // 店铺列表
       list,
+
+      page,
+
+      pagesize,
+
+      total,
 
       // 新建/编辑是否打开
       dialogOpen: false,
@@ -32,7 +41,7 @@ window.pageInit = ({
 
   methods: {
     // 停用
-    handleStop(item) {
+    handleStop(item, index) {
       this.$confirm(`确认停用店铺${item.name}？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -46,12 +55,14 @@ window.pageInit = ({
             id: item.id,
             status: 0,
           },
-        });
-      })
-      .then(() => {
-        this.$message({
-          type: 'success',
-          message: '停用成功!',
+        })
+        .then((r) => {
+          if (r.success) {
+            this.$message('停用成功');
+            this.list[index].status = 0;
+          } else {
+            this.$message('停用失败，请重试');
+          }
         });
       })
       .catch(() => {
@@ -63,30 +74,36 @@ window.pageInit = ({
     },
 
     // 删除
-    handleDelete(item) {
+    handleDelete(item, index) {
       this.$confirm(`确认删除店铺${item.name}？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
-      .then(() => {
-        fetch({
-          url: '/api/shop/remove',
-          type: 'POST',
-          data: { id: item.id },
+        .then(() => {
+          fetch({
+            url: '/api/shop/remove',
+            type: 'POST',
+            data: { id: item.id },
+          })
+          .then((r) => {
+            if (r.success) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!',
+              });
+              this.list.splice(index, 1);
+            } else {
+              this.$message('删除失败，请重试');
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除',
+          });
         });
-      })
-      .then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!',
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除',
-        });
-      });
     },
 
     // 编辑
@@ -97,9 +114,13 @@ window.pageInit = ({
       })
       .then(
         (res) => {
-          this.form = res;
-          this.isEdit = true;
-          this.dialogOpen = true;
+          if (res.success) {
+            this.form = res.detail;
+            this.isEdit = true;
+            this.dialogOpen = true;
+          } else {
+            this.$message('获取店铺信息失败，请重试');
+          }
         },
       );
     },
@@ -124,7 +145,13 @@ window.pageInit = ({
       })
       .then(
         (r) => {
-          if (r.success) this.$message('新建成功');
+          if (r.success) {
+            this.$message('新建成功');
+            this.list.unshift(r.detail);
+            this.dialogOpen = false;
+          } else {
+            this.$message('新建失败，请重试');
+          }
         },
       );
     },
@@ -137,13 +164,18 @@ window.pageInit = ({
       })
       .then(
         (r) => {
-          if (r.success) this.$message('编辑成功');
+          if (r.success) {
+            this.dialogOpen = false;
+            this.$message('编辑成功');
+          } else {
+            this.$message('编辑失败，请重试');
+          }
         },
       );
     },
 
     handleCurrentChange(val) {
-      console.log(val); // eslint-disable-line
+      location.href = `/shopList/?page=${val}`;
     },
   },
 });

@@ -15,7 +15,7 @@ POST    /api/resetpassword            @controllers.Application.resetpassword
 GET     /api/captcha                  @controllers.Application.captcha(mobile: String)
 
 # shop
-GET     /api/shop/list                @controllers.Application.shopList(page: Int ?= 1)
+GET     /shopList                     @controllers.Application.shopList(page: Int ?= 1)
 
 POST    /api/shop/add                 @controllers.Application.shopAdd
 

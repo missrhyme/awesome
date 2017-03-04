@@ -1,11 +1,15 @@
 @(str1: String, str2: String)
 
 @main {
-  
+
 }{
   <div style="padding: 20px; position: relative">
     <h2 class="title">短信模板列表</h2>
-    <el-button type="primary" @@click="handleCreate" icon="plus" style="position: absolute; right: 20px; top:20px">新增</el-button>
+    <el-breadcrumb class="breadcrumb">
+      <el-breadcrumb-item><a href="/">首页</a></el-breadcrumb-item>
+      <el-breadcrumb-item><a href="javascript:;">短信模板列表</a></el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-button type="primary" @@click="handleCreate" icon="plus" style="position: absolute; right: 20px; top:10px">新增</el-button>
     <el-table
       :data="list"
       stripe
@@ -24,8 +28,13 @@
         label="操作"
         width="200">
         <template scope="scope">
-          <el-button type="primary" size="small" @@click="handleEdit(scope.row)">编辑</el-button>
-          <el-button type="danger" size="small" @@click="handleDelete(scope.row)">删除</el-button>
+          <el-tooltip class="item" effect="dark" content="编辑" placement="top-end">
+             <el-button type="primary" icon="edit" size="small" @@click="handleEdit(scope.row)"></el-button>
+          </el-tooltip>
+
+          <el-tooltip class="item" effect="dark" content="删除" placement="top-end">
+            <el-button type="danger" icon="delete" size="small" @@click="handleDelete(scope.row)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -44,7 +53,11 @@
              <el-input v-model="form.name" auto-complete="off"></el-input>
            </el-form-item>
            <el-form-item label="内容" :label-width="'160px'">
-             <el-input type="textarea" v-model="form.content" auto-complete="off" id="content-area"></el-input>
+             <el-input
+               type="textarea"
+               :rows="10"
+               v-model="form.content" auto-complete="off" id="content-area" resize="none"
+             ></el-input>
            </el-form-item>
          </el-form>
          <div slot="footer" class="dialog-footer" style="padding-left: 160px">

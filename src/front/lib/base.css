@@ -47,6 +47,11 @@ table {
   border-spacing: 0;
 }
 
+/*for decorator*/
+.logo{
+  background: #2a3a4a;
+}
+
 /* for pages */
 .title{
   font-size: 22px;

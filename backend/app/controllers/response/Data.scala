@@ -15,5 +15,6 @@ case class ShopItem(id: Int, name: String, status: Int, token: Boolean)
 // template
 case class MailAdd(name: String, content: String)
 case class SMSAdd(name: String, content: String)
+case class SendMail(template_id: Int, user_id: Int, scrap_id: Int)
 
 

@@ -22,7 +22,7 @@ import scala.util.Random
 /**
   * Advanced structured data based-UI for eBay
   */
-class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
+class Application @Inject()(mailClient: MailerClient) extends Controller with Json4s {
     implicit val formats = DefaultFormats
     val CAPTCHA_SIZE = 6
 
@@ -35,11 +35,11 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
         val login = request.body.extract[Login]
         Future {
             DB.withConnection { conn =>
-                val sql = "select count(*) as cnt from users where username=? and password=?"
-                val state = conn.prepareStatement(sql)
+                var sql = "select count(*) as cnt from users where username=? and password=?"
+                var state = conn.prepareStatement(sql)
                 state.setString(1, login.username)
                 state.setString(2, login.password)
-                val rs = state.executeQuery()
+                var rs = state.executeQuery()
                 rs.next()
                 if (rs.getInt("cnt") == 1) {
                     rs.next()
@@ -48,6 +48,10 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
                             ("data" ->
                                 ("success" -> true)) ~
                             ("msg" -> "登陆成功")
+                    sql = "select * from users where username=? and password=?"
+                    state = conn.prepareStatement(sql)
+                    rs = state.executeQuery()
+                    rs.next()
                     Ok(compact(renderJson(resp)))
                         .withSession((request.session +
                             ("login_name" -> login.username)) +
@@ -345,6 +349,43 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
         }
     }
 
+    def shopStop = Action.async(json) { implicit request =>
+        val shop = request.body.extract[ShopRemove]
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
+        val stopStatus = 0
+        Future {
+            DB.withConnection { conn =>
+                var sql = "select count(*) as cnt from shop where shop_id=? and user_id=?"
+                var state = conn.prepareStatement(sql)
+                state.setInt(1, shop.id)
+                state.setInt(2, loginId)
+                val rs = state.executeQuery()
+                rs.next()
+                val count = rs.getInt("cnt")
+                if (count == 1) {
+                    sql = "update shop set status=? where shop_id=?"
+                    state = conn.prepareStatement(sql)
+                    state.setInt(1, stopStatus)
+                    state.setInt(2, shop.id)
+                    state.executeUpdate()
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> true)) ~
+                            ("msg" -> "停用成功")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                } else {
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> false)) ~
+                            ("msg" -> "停用失败")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                }
+            }
+        }
+    }
     /** ****************  Shop end  ******************/
 
     /** ****************  Mail begin  ******************/
@@ -458,16 +499,61 @@ class Application @Inject()(mail: MailerClient) extends Controller with Json4s {
         }
     }
 
-    def test = Action {
-        val email = Email(
-            "Simple email",
-            "test1 FROM <prodigious@163.com>",
-            Seq("test2 TO <weilibkk@163.com>"),
-            // sends text, HTML or both...
-            bodyText = Some("A text message")
-        )
-        mail.send(email)
-        Ok("send")
+    def test = Action.async(json) { implicit request =>
+
+        import scala.collection.mutable
+
+        def sendMail(map: mutable.Map[String, String], content: String) = {
+
+            var template = content
+            map.foreach{ case (label, value) =>
+                template = template.replace(label, value)
+            }
+            val email = Email(
+                "Simple email",
+                "test1 FROM <prodigious@163.com>",
+                Seq("test2 TO <prodigious@163.com>"),
+                // sends text, HTML or both...
+                bodyText = Some(template)
+            )
+            mailClient.send(email)
+        }
+
+        val mail = request.body.extract[SendMail]
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
+        val map = mutable.Map.empty[String, String]
+        Future {
+            DB.withConnection { conn =>
+                var sql = "select * from buybox_scrap where scrap_id=?"
+                var state = conn.prepareStatement(sql)
+                state.setInt(1, mail.scrap_id)
+                var rs = state.executeQuery()
+                rs.next()
+                map += ("{seller}" -> rs.getString("seller"))
+                sql = "select * from users where user_id=?"
+                state = conn.prepareStatement(sql)
+                state.setInt(1, mail.user_id)
+                rs = state.executeQuery()
+                rs.next()
+                map += ("{buyer}" -> rs.getString("username"))
+                sql = "select * from mail_template where mail_id=?"
+                state = conn.prepareStatement(sql)
+                state.setInt(1, mail.template_id)
+                rs = state.executeQuery()
+                rs.next()
+                val template = rs.getString("content")
+                sendMail(map, template)
+                val resp =
+                    ("status" -> 200) ~
+                        ("data" ->
+                            ("success" -> true)) ~
+                        ("msg" -> "发送成功")
+                Ok(compact(renderJson(resp))).withSession(request.session)
+            }
+        }
+
+
     }
 
 

@@ -25,6 +25,8 @@ GET     /api/shop/detail              @controllers.Application.shopDetail(id: In
 
 POST    /api/shop/update              @controllers.Application.shopUpdate
 
+POST    /api/shop/stop                @controllers.Application.shopStop
+
 # template
 GET     /mailTemplate                 @controllers.Application.mailTemplate
 
@@ -34,7 +36,7 @@ POST    /api/mailTemplate/add         @controllers.Application.mailAdd
 
 POST    /api/smsTemplate/add          @controllers.Application.smsAdd
 
-GET     /test                         @controllers.Application.test
+POST    /api/mailTemplate/test        @controllers.Application.test
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                 @controllers.Assets.at(path="/public", file)

@@ -36,6 +36,12 @@ window.pageInit = ({
       isEdit: false,
 
       form: defaultForm,
+
+      rules: {
+        name: [
+          { required: true, message: '请输入店铺名称', trigger: 'blur' },
+        ],
+      },
     };
   },
 
@@ -133,8 +139,17 @@ window.pageInit = ({
     },
 
     handleConfirm() {
-      if (this.isEdit) this.handleEditSubmit();
-      else this.handleCreateSubmit();
+      this.$refs.ruleForm.validate(
+        (valid) => {
+          if (!valid) {
+            this.$message('表格不完整，请检查后提交！');
+          } else if (this.isEdit) {
+            this.handleEditSubmit();
+          } else {
+            this.handleCreateSubmit();
+          }
+        },
+      );
     },
 
     handleCreateSubmit() {

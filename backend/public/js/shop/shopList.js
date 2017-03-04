@@ -2164,7 +2164,11 @@ window.pageInit = function (_ref) {
         // 是否为编辑状态
         isEdit: false,
 
-        form: defaultForm
+        form: defaultForm,
+
+        rules: {
+          name: [{ required: true, message: '请输入店铺名称', trigger: 'blur' }]
+        }
       };
     },
 
@@ -2262,10 +2266,20 @@ window.pageInit = function (_ref) {
         this.dialogOpen = true;
       },
       handleConfirm: function handleConfirm() {
-        if (this.isEdit) this.handleEditSubmit();else this.handleCreateSubmit();
+        var _this4 = this;
+
+        this.$refs.ruleForm.validate(function (valid) {
+          if (!valid) {
+            _this4.$message('表格不完整，请检查后提交！');
+          } else if (_this4.isEdit) {
+            _this4.handleEditSubmit();
+          } else {
+            _this4.handleCreateSubmit();
+          }
+        });
       },
       handleCreateSubmit: function handleCreateSubmit() {
-        var _this4 = this;
+        var _this5 = this;
 
         (0, _fetch2.default)({
           url: '/api/shop/add',
@@ -2273,16 +2287,16 @@ window.pageInit = function (_ref) {
           data: this.form
         }).then(function (r) {
           if (r.success) {
-            _this4.$message('新建成功');
-            _this4.list.unshift(r.detail);
-            _this4.dialogOpen = false;
+            _this5.$message('新建成功');
+            _this5.list.unshift(r.detail);
+            _this5.dialogOpen = false;
           } else {
-            _this4.$message('新建失败，请重试');
+            _this5.$message('新建失败，请重试');
           }
         });
       },
       handleEditSubmit: function handleEditSubmit() {
-        var _this5 = this;
+        var _this6 = this;
 
         (0, _fetch2.default)({
           url: '/api/shop/update',
@@ -2290,10 +2304,10 @@ window.pageInit = function (_ref) {
           data: this.form
         }).then(function (r) {
           if (r.success) {
-            _this5.dialogOpen = false;
-            _this5.$message('编辑成功');
+            _this6.dialogOpen = false;
+            _this6.$message('编辑成功');
           } else {
-            _this5.$message('编辑失败，请重试');
+            _this6.$message('编辑失败，请重试');
           }
         });
       },

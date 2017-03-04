@@ -1,3 +1,4 @@
+[shop](#shop)
 [Email-sms](#email--sms-template)
 
 # 接口基础格式
@@ -150,6 +151,27 @@ success| 是否成功
  ```
 
 6.删除授权店铺 POST /api/shop/remove
+
+request| detail
+-----|------
+ id | 店铺ID
+
+response| detail
+-----|------
+success| 是否成功
+
+示例：
+```json
+{
+  "status" : 200,
+  "data": {
+   "success": true
+  },
+  "msg" : ""
+}
+```
+
+6.5停用店铺(status置为0) POST /api/shop/stop
 
 request| detail
 -----|------

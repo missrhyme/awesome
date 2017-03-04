@@ -48,9 +48,39 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+a{
+  text-decoration: none;
+}
+/*for decorator*/
+.logo{
+  background: #2a3a4a;
+  height: 60px;
+  padding-top: 5px;
+}
+.logo>img{
+  height: 50px;
+  display: block;
+  margin-left: 10px;
+}
+.el-menu-item a{
+  color: #bfc9d9;
+}
 
 /* for pages */
 .title{
-  font-size: 22px;
+  color: #47637d;
+  font-size: 18px;
+  position: absolute;
+  top: -40px;
+}
+.breadcrumb{
+  padding-left: 5px;
   padding-bottom: 20px;
+}
+
+.success{
+  color: #21b161;
+}
+.error{
+  color: #FF4949;
 }

@@ -2184,11 +2184,10 @@ window.pageInit = function (_ref) {
           type: 'warning'
         }).then(function () {
           (0, _fetch2.default)({
-            url: '/api/shop/update',
+            url: '/api/shop/stop',
             type: 'POST',
             data: {
-              id: item.id,
-              status: 0
+              id: item.id
             }
           }).then(function (r) {
             if (r.success) {
@@ -2207,9 +2206,41 @@ window.pageInit = function (_ref) {
       },
 
 
+      // 启用
+      handleRestart: function handleRestart(item, index) {
+        var _this2 = this;
+
+        this.$confirm('\u786E\u8BA4\u542F\u7528\u5E97\u94FA' + item.name + '\uFF1F', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(function () {
+          (0, _fetch2.default)({
+            url: '/api/shop/restart',
+            type: 'POST',
+            data: {
+              id: item.id
+            }
+          }).then(function (r) {
+            if (r.success) {
+              _this2.$message('启用成功');
+              _this2.list[index].status = 1;
+            } else {
+              _this2.$message('启用失败，请重试');
+            }
+          });
+        }).catch(function () {
+          _this2.$message({
+            type: 'info',
+            message: '已取消启用'
+          });
+        });
+      },
+
+
       // 删除
       handleDelete: function handleDelete(item, index) {
-        var _this2 = this;
+        var _this3 = this;
 
         this.$confirm('\u786E\u8BA4\u5220\u9664\u5E97\u94FA' + item.name + '\uFF1F', '提示', {
           confirmButtonText: '确定',
@@ -2222,17 +2253,17 @@ window.pageInit = function (_ref) {
             data: { id: item.id }
           }).then(function (r) {
             if (r.success) {
-              _this2.$message({
+              _this3.$message({
                 type: 'success',
                 message: '删除成功!'
               });
-              _this2.list.splice(index, 1);
+              _this3.list.splice(index, 1);
             } else {
-              _this2.$message('删除失败，请重试');
+              _this3.$message('删除失败，请重试');
             }
           });
         }).catch(function () {
-          _this2.$message({
+          _this3.$message({
             type: 'info',
             message: '已取消删除'
           });
@@ -2242,18 +2273,18 @@ window.pageInit = function (_ref) {
 
       // 编辑
       handleEdit: function handleEdit(item) {
-        var _this3 = this;
+        var _this4 = this;
 
         (0, _fetch2.default)({
           url: '/api/shop/detail',
           data: { id: item.id }
         }).then(function (res) {
           if (res.success) {
-            _this3.form = res.detail;
-            _this3.isEdit = true;
-            _this3.dialogOpen = true;
+            _this4.form = res.detail;
+            _this4.isEdit = true;
+            _this4.dialogOpen = true;
           } else {
-            _this3.$message('获取店铺信息失败，请重试');
+            _this4.$message('获取店铺信息失败，请重试');
           }
         });
       },
@@ -2266,20 +2297,20 @@ window.pageInit = function (_ref) {
         this.dialogOpen = true;
       },
       handleConfirm: function handleConfirm() {
-        var _this4 = this;
+        var _this5 = this;
 
         this.$refs.ruleForm.validate(function (valid) {
           if (!valid) {
-            _this4.$message('表格不完整，请检查后提交！');
-          } else if (_this4.isEdit) {
-            _this4.handleEditSubmit();
+            _this5.$message('表格不完整，请检查后提交！');
+          } else if (_this5.isEdit) {
+            _this5.handleEditSubmit();
           } else {
-            _this4.handleCreateSubmit();
+            _this5.handleCreateSubmit();
           }
         });
       },
       handleCreateSubmit: function handleCreateSubmit() {
-        var _this5 = this;
+        var _this6 = this;
 
         (0, _fetch2.default)({
           url: '/api/shop/add',
@@ -2287,16 +2318,16 @@ window.pageInit = function (_ref) {
           data: this.form
         }).then(function (r) {
           if (r.success) {
-            _this5.$message('新建成功');
-            _this5.list.unshift(r.detail);
-            _this5.dialogOpen = false;
+            _this6.$message('新建成功');
+            _this6.list.unshift(r.detail);
+            _this6.dialogOpen = false;
           } else {
-            _this5.$message('新建失败，请重试');
+            _this6.$message('新建失败，请重试');
           }
         });
       },
       handleEditSubmit: function handleEditSubmit() {
-        var _this6 = this;
+        var _this7 = this;
 
         (0, _fetch2.default)({
           url: '/api/shop/update',
@@ -2304,10 +2335,10 @@ window.pageInit = function (_ref) {
           data: this.form
         }).then(function (r) {
           if (r.success) {
-            _this6.dialogOpen = false;
-            _this6.$message('编辑成功');
+            _this7.dialogOpen = false;
+            _this7.$message('编辑成功');
           } else {
-            _this6.$message('编辑失败，请重试');
+            _this7.$message('编辑失败，请重试');
           }
         });
       },

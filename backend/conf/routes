@@ -27,6 +27,8 @@ POST    /api/shop/update              @controllers.Application.shopUpdate
 
 POST    /api/shop/stop                @controllers.Application.shopStop
 
+POST    /api/shop/restart             @controllers.Application.shopRestart
+
 # template
 GET     /mailTemplate                 @controllers.Application.mailTemplate
 

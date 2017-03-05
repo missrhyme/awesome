@@ -82,5 +82,24 @@ window.pageInit = ({
       this.form.content += item.value;
     },
 
+    // Just for test
+    handleTest() {
+      const email = window.prompt('输入要发送的邮箱地址');
+      const id = window.prompt('输入模板id');
+      fetch({
+        url: '/api/mailTemplate/test',
+        type: 'POST',
+        data: {
+          id,
+          email,
+        },
+      })
+      .then(
+        (r) => {
+          if (r.success) this.$message('发送成功');
+        },
+      );
+    },
+
   },
 });

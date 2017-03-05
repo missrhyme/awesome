@@ -55,11 +55,10 @@ window.pageInit = ({
       })
       .then(() => {
         fetch({
-          url: '/api/shop/update',
+          url: '/api/shop/stop',
           type: 'POST',
           data: {
             id: item.id,
-            status: 0,
           },
         })
         .then((r) => {
@@ -75,6 +74,38 @@ window.pageInit = ({
         this.$message({
           type: 'info',
           message: '已取消停用',
+        });
+      });
+    },
+
+    // 启用
+    handleRestart(item, index) {
+      this.$confirm(`确认启用店铺${item.name}？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+      .then(() => {
+        fetch({
+          url: '/api/shop/restart',
+          type: 'POST',
+          data: {
+            id: item.id,
+          },
+        })
+        .then((r) => {
+          if (r.success) {
+            this.$message('启用成功');
+            this.list[index].status = 1;
+          } else {
+            this.$message('启用失败，请重试');
+          }
+        });
+      })
+      .catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消启用',
         });
       });
     },

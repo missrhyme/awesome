@@ -386,6 +386,44 @@ class Application @Inject()(mailClient: MailerClient) extends Controller with Js
             }
         }
     }
+
+    def shopRestart = Action.async(json) { implicit request =>
+        val shop = request.body.extract[ShopRemove]
+        //val loginName = request.session.get("login_id").head
+        val loginId = 1
+        val stopStatus = 1
+        Future {
+            DB.withConnection { conn =>
+                var sql = "select count(*) as cnt from shop where shop_id=? and user_id=?"
+                var state = conn.prepareStatement(sql)
+                state.setInt(1, shop.id)
+                state.setInt(2, loginId)
+                val rs = state.executeQuery()
+                rs.next()
+                val count = rs.getInt("cnt")
+                if (count == 1) {
+                    sql = "update shop set status=? where shop_id=?"
+                    state = conn.prepareStatement(sql)
+                    state.setInt(1, stopStatus)
+                    state.setInt(2, shop.id)
+                    state.executeUpdate()
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> true)) ~
+                            ("msg" -> "停用成功")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                } else {
+                    val resp =
+                        ("status" -> 200) ~
+                            ("data" ->
+                                ("success" -> false)) ~
+                            ("msg" -> "停用失败")
+                    Ok(compact(renderJson(resp))).withSession(request.session)
+                }
+            }
+        }
+    }
     /** ****************  Shop end  ******************/
 
     /** ****************  Mail begin  ******************/

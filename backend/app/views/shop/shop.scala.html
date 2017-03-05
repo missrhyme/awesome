@@ -41,8 +41,11 @@
           <el-tooltip class="item" effect="dark" content="编辑" placement="top-end">
             <el-button type="primary" icon="edit" size="small" @@click="handleEdit(scope.row)"></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="停用" placement="top-end">
-            <el-button type="primary" icon="information" size="small" @@click="handleStop(scope.row, scope.$index)"></el-button>
+          <el-tooltip class="item" effect="dark" content="停用" placement="top-end" v-show="scope.row.status == 1">
+            <el-button type="danger" icon="information" size="small" @@click="handleStop(scope.row, scope.$index)"></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="启用" placement="top-end" v-show="scope.row.status == 0">
+            <el-button type="primary" icon="caret-right" size="small" @@click="handleRestart(scope.row, scope.$index)"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top-end">
             <el-button type="danger" icon="delete" size="small" @@click="handleDelete(scope.row, scope.$index)"></el-button>

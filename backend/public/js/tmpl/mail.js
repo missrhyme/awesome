@@ -2206,6 +2206,25 @@ window.pageInit = function (_ref) {
       },
       handleKeywords: function handleKeywords(item) {
         this.form.content += item.value;
+      },
+
+
+      // Just for test
+      handleTest: function handleTest() {
+        var _this3 = this;
+
+        var email = window.prompt('输入要发送的邮箱地址');
+        var id = window.prompt('输入模板id');
+        (0, _fetch2.default)({
+          url: '/api/mailTemplate/test',
+          type: 'POST',
+          data: {
+            id: id,
+            email: email
+          }
+        }).then(function (r) {
+          if (r.success) _this3.$message('发送成功');
+        });
       }
     }
   });

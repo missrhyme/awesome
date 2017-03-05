@@ -10,6 +10,7 @@
       <el-breadcrumb-item><a href="javascript:;">邮件模板列表</a></el-breadcrumb-item>
     </el-breadcrumb>
     <el-button type="primary" @@click="handleCreate" icon="plus" style="position: absolute; right: 20px; top:10px">新增</el-button>
+    <el-button type="primary" @@click="handleTest" style="position: absolute; right: 120px; top:10px">发送测试邮件</el-button>
     <el-table
       :data="list"
       stripe

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/theme/index.css">
+    <link rel="stylesheet" media="screen" href="./css/base.css" />
+    <script src="http://unpkg.com/vue/dist/vue.js"></script>
+    <script src="http://unpkg.com/element-ui/lib/index.js"></script>
+    <title>amz defend</title>
+  </head>
+  <body>
+    <div id="app">
+      <el-col :span="4">
+        <el-menu theme="dark" default-active="2" class="el-menu-vertical-demo" style="height: 1000px">
+          <div class="logo">
+            <img
+              src="./pic/logo.png"
+              alt=""
+            >
+          </div>
+          <el-menu-item index="1"><i class="el-icon-setting"></i><a href="/shopList">店铺管理</a></el-menu-item>
+          <el-submenu index="2">
+            <template slot="title"><i class="el-icon-menu"></i>跟卖信息</template>
+              <el-menu-item index="2-1">商品列表</el-menu-item>
+              <el-menu-item index="2-2">白名单管理</el-menu-item>
+            </el-submenu>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title"><i class="el-icon-message"></i>信息通知</template>
+              <el-menu-item index="3-1"><a href="/mailTemplate">邮件管理</a></el-menu-item>
+              <el-menu-item index="3-2"><a href="/smsTemplate">短信管理</a></el-menu-item>
+            </el-submenu>
+          </el-submenu>
+        </el-menu>
+      </el-col>
+      <el-col :span="20">
+        <el-menu default-active="1" class="el-menu-demo" mode="horizontal" class="nav">
+          <el-submenu index="2" style="float:right">
+            <template slot="title">missrhyme</template>
+            <el-menu-item index="2-1">个人资料</el-menu-item>
+            <el-menu-item index="2-2"><a href="/">退出</a></el-menu-item>
+          </el-submenu>
+          <el-menu-item index="1" style="float:right">帮助中心</el-menu-item>
+        </el-menu>
+        <div style="padding: 20px; position: relative">
+          <h2 class="title">短信模板列表</h2>
+          <el-breadcrumb class="breadcrumb">
+            <el-breadcrumb-item><a href="/">首页</a></el-breadcrumb-item>
+            <el-breadcrumb-item><a href="javascript:;">短信模板列表</a></el-breadcrumb-item>
+          </el-breadcrumb>
+          <el-button type="primary" @click="handleCreate" icon="plus" style="position: absolute; right: 20px; top:10px">新增</el-button>
+          <el-table
+            :data="list"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              prop="name"
+              label="模板名称"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="content"
+              label="内容">
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="操作"
+              width="200">
+              <template scope="scope">
+                <el-tooltip class="item" effect="dark" content="编辑" placement="top-end">
+                   <el-button type="primary" icon="edit" size="small" @click="handleEdit(scope.row)"></el-button>
+                </el-tooltip>
+
+                <el-tooltip class="item" effect="dark" content="删除" placement="top-end">
+                  <el-button type="danger" icon="delete" size="small" @click="handleDelete(scope.row)"></el-button>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+          </el-table>
+
+           <el-dialog title="新增短信模板" v-model="dialogOpen">
+             <div style="margin: 0 auto; width: 600px">
+               <el-form :model="form">
+                 <el-form-item label="邮件关键字" :label-width="'160px'">
+                   <el-button
+                     v-for="item in keywords"
+                     size="small"
+                     @click="handleKeywords(item)"
+                    >{{item.label}} - {{item.value}}</el-button>
+                 </el-form-item>
+                 <el-form-item label="模板名称" :label-width="'160px'">
+                   <el-input v-model="form.name" auto-complete="off"></el-input>
+                 </el-form-item>
+                 <el-form-item label="内容" :label-width="'160px'">
+                   <el-input
+                     type="textarea"
+                     :rows="10"
+                     v-model="form.content" auto-complete="off" id="content-area" resize="none"
+                   ></el-input>
+                 </el-form-item>
+               </el-form>
+               <div slot="footer" class="dialog-footer" style="padding-left: 160px">
+                 <el-button type="primary" @click="handleSubmit">确 定</el-button>
+                 <el-button @click="dialogOpen = false">取 消</el-button>
+               </div>
+             </div>
+           </el-dialog>
+        </div>
+      </el-col>
+    </div>
+    <script src="./js/tmpl/SMS.js"></script>
+    <script>
+      window.pageInit({
+        pageType: 'SMS',
+        keywords: [
+          {
+            "value": "{buyer}",
+            "label": "买家姓名",
+          },
+          {
+            "value": "{seller}",
+            "label": "卖家姓名",
+          }
+        ],
+        list: [
+          {
+            "id": '10000',
+            "name": "很厉害的短信模板",
+            "content": "你好{buyer}，再见{seller}"
+          },
+          {
+            "id": '10001',
+            "name": "很厉害的短信模板22",
+            "content": "你好{buyer}，再见{seller}"
+          }
+        ]
+      })
+    </script>
+  </body>
+</html>

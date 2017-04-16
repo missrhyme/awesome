@@ -16,6 +16,7 @@ app.set('view engine', 'html')
 
 // var compiler = webpack(config)
 app.use('/lib', express.static('lib'))
+app.use('/css', express.static('styles'))
 app.use('/dist', express.static('dist'))
 // app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
 // app.use(webpackHotMiddleware(compiler))

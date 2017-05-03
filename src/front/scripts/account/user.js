@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import '../../components/layout';
 // import fetch from '../../utils/fetch';
 //
 const defaultForm = {

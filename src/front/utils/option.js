@@ -1,3 +1,5 @@
+import fetch from './fetch';
+
 function success({ context, msg }) {
   context.$message(msg);
 }

@@ -1,32 +1,36 @@
 import Vue from 'vue';
-// import fetch from '../../utils/fetch';
+import fetch from '../../utils/fetch';
+import '../../components/layout';
 import option from '../../utils/option';
 
-window.pageInit = ({
-  list = [],
-  page = 1,
-  pagesize = 10,
-  total = 10,
-}) => new Vue({
+const vm = new Vue({
   el: '#app',
   data() {
     return {
       // 店铺列表
-      list,
-
-      page,
-
-      pagesize,
-
-      total,
+      list: [],
     };
   },
 
   methods: {
+    // 获取列表
+    getList(pageIndex = 1) {
+      fetch({
+        url: '/withsell/list.sj',
+        type: 'POST',
+        data: {
+          pageIndex,
+        },
+      })
+        .then(
+          (res) => { this.list = res.data; },
+        );
+    },
+
     // 删除
     handleDelete(item, index) {
       option({
-        url: '/api/order/remove',
+        url: '/withsell/list.sj',
         type: 'POST',
         data: { id: item.id },
         context: this,
@@ -52,6 +56,7 @@ window.pageInit = ({
       //   },
       // );
     },
-
   },
 });
+
+vm.getList();

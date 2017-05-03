@@ -1,24 +1,42 @@
 import Vue from 'vue';
+import '../../components/layout';
 import fetch from '../../utils/fetch';
 import option from '../../utils/option';
 
-window.pageInit = ({
-  list = [],
-  page = 1,
-  pagesize = 10,
-  total = 10,
-}) => new Vue({
+new Vue({
   el: '#app',
+  // components: {
+  //   'amz-layout': layout,
+  // },
   data() {
     return {
       // 店铺列表
-      list,
-
-      page,
-
-      pagesize,
-
-      total,
+      list: [
+        {
+          "id": '10000',
+          "sku": 'EU-OU12-3XQ4',
+          "name": "商品1",
+          "status": "1",
+          "catalog": "",
+          "buyer": "",
+          "total": "10",
+          "notDeliver": "20",
+          "weight": 0.01,
+          "volume": '0/19/20'
+        },
+        {
+          "id": '10001',
+          "sku": 'EU-OU12-3XQ4',
+          "name": "商品2",
+          "status": "2",
+          "catalog": "",
+          "buyer": "",
+          "total": "109",
+          "notDeliver": "210",
+          "weight": 10.01,
+          "volume": '0/123/20'
+        },
+      ],
     };
   },
 

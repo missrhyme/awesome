@@ -1,3 +1,4 @@
 server.js
+mock.js
 webpack.config.js
 utils/filesToList.js

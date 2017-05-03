@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import '../../components/layout';
 import fetch from '../../utils/fetch';
 
 const defaultForm = {
@@ -11,23 +12,18 @@ const defaultForm = {
   marketplace: '',
 };
 
-window.pageInit = ({
-  list = [],
-  page = 1,
-  pagesize = 10,
-  total = 10,
-}) => new Vue({
+const vm = new Vue({
   el: '#app',
   data() {
     return {
       // 店铺列表
-      list,
+      list: [],
 
-      page,
+      page: 1,
 
-      pagesize,
+      pagesize: 10,
 
-      total,
+      total: 0,
 
       // 新建/编辑是否打开
       dialogOpen: false,
@@ -46,6 +42,23 @@ window.pageInit = ({
   },
 
   methods: {
+    // 获取列表
+    getList(pageIndex = 1) {
+      fetch({
+        url: '/shop/list.sj',
+        type: 'POST',
+        data: {
+          pageIndex,
+        },
+      })
+        .then(
+          (res) => {
+            this.list = res.list;
+            this.total = res.total;
+          },
+        );
+    },
+
     // 停用
     handleStop(item, index) {
       this.$confirm(`确认停用店铺${item.name}？`, '提示', {
@@ -55,19 +68,16 @@ window.pageInit = ({
       })
       .then(() => {
         fetch({
-          url: '/api/shop/stop',
+          url: '/shop/updatestatus.sj',
           type: 'POST',
           data: {
-            id: item.id,
+            id: item.shopId,
+            status: 1,
           },
         })
-        .then((r) => {
-          if (r.success) {
-            this.$message('停用成功');
-            this.list[index].status = 0;
-          } else {
-            this.$message('停用失败，请重试');
-          }
+        .then(() => {
+          this.$message('停用成功');
+          this.list[index].status = 0;
         });
       })
       .catch(() => {
@@ -87,19 +97,16 @@ window.pageInit = ({
       })
       .then(() => {
         fetch({
-          url: '/api/shop/restart',
+          url: '/shop/updatestatus.sj',
           type: 'POST',
           data: {
-            id: item.id,
+            id: item.shopId,
+            status: 2,
           },
         })
-        .then((r) => {
-          if (r.success) {
-            this.$message('启用成功');
-            this.list[index].status = 1;
-          } else {
-            this.$message('启用失败，请重试');
-          }
+        .then(() => {
+          this.$message('启用成功');
+          this.list[index].status = 1;
         });
       })
       .catch(() => {
@@ -119,20 +126,16 @@ window.pageInit = ({
       })
         .then(() => {
           fetch({
-            url: '/api/shop/remove',
+            url: '/shop/delete.sj',
             type: 'POST',
-            data: { id: item.id },
+            data: { id: item.shopId },
           })
-          .then((r) => {
-            if (r.success) {
-              this.$message({
-                type: 'success',
-                message: '删除成功!',
-              });
-              this.list.splice(index, 1);
-            } else {
-              this.$message('删除失败，请重试');
-            }
+          .then(() => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!',
+            });
+            this.list.splice(index, 1);
           });
         })
         .catch(() => {
@@ -146,18 +149,14 @@ window.pageInit = ({
     // 编辑
     handleEdit(item) {
       fetch({
-        url: '/api/shop/detail',
-        data: { id: item.id },
+        url: '/shop/get.sj',
+        data: { id: item.shopId },
       })
       .then(
         (res) => {
-          if (res.success) {
-            this.form = res.detail;
-            this.isEdit = true;
-            this.dialogOpen = true;
-          } else {
-            this.$message('获取店铺信息失败，请重试');
-          }
+          this.form = res.detail;
+          this.isEdit = true;
+          this.dialogOpen = true;
         },
       );
     },
@@ -185,43 +184,38 @@ window.pageInit = ({
 
     handleCreateSubmit() {
       fetch({
-        url: '/api/shop/add',
+        url: '/shop/save.sj',
         type: 'POST',
         data: this.form,
       })
       .then(
         (r) => {
-          if (r.success) {
-            this.$message('新建成功');
-            this.list.unshift(r.detail);
-            this.dialogOpen = false;
-          } else {
-            this.$message('新建失败，请重试');
-          }
+          this.$message('新建成功');
+          this.list.unshift(r);
+          this.dialogOpen = false;
         },
       );
     },
 
     handleEditSubmit() {
       fetch({
-        url: '/api/shop/update',
+        url: '/shop/save.sj',
         type: 'POST',
         data: this.form,
       })
       .then(
-        (r) => {
-          if (r.success) {
-            this.dialogOpen = false;
-            this.$message('编辑成功');
-          } else {
-            this.$message('编辑失败，请重试');
-          }
+        () => {
+          this.dialogOpen = false;
+          this.$message('编辑成功');
         },
       );
     },
 
     handleCurrentChange(val) {
-      location.href = `/shopList/?page=${val}`;
+      this.page = val;
+      this.getList(val);
     },
   },
 });
+
+vm.getList();

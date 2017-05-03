@@ -1,5 +1,7 @@
-import request from 'superagent';
+import axios from 'axios';
 
+const host = 'http://120.77.208.7:8080/amzdefend/services';
+// const host = 'http://localhost:8080/amzdefend/services';
 /**
  * 通用的ajax方法
  * @param  {string} url 请求地址
@@ -24,30 +26,23 @@ import request from 'superagent';
 export default function fetch({
   url,
   data,
-  timeout = 10000,
+  // timeout = 10000,
   type = 'GET',
-  // dataType = 'JSON'
+  responseType = 'json',
 }) {
-  let quest;
-  if (type === 'POST') {
-    quest = request(type, url)
-      .timeout(timeout)
-      .send(data);
-  } else {
-    quest = request
-      .get(url)
-      .timeout(timeout)
-      .query(data);
-  }
-  return (
-    quest
-      .then(
-        (response) => {
-          const body = response.body || JSON.parse(response.text);
-          if (body.status == 200) return body.data;
-          return Promise.reject(body.msg);
-        },
-        err => Promise.reject(err),
-      )
-  );
+  return axios({
+    url: `${host}${url}`,
+    method: type,
+    data,
+    responseType,
+  })
+    .then(
+      (response) => {
+        if (response.data.success) {
+          return response.data.data;
+        }
+        return Promise.reject(response);
+      },
+      err => Promise.reject(err),
+    );
 }

@@ -1,28 +1,31 @@
 import Vue from 'vue';
+import '../../components/layout';
 import fetch from '../../utils/fetch';
 
 const defaultForm = {
-  mail: '',
+  name: '',
   content: '',
 };
 
-window.pageInit = ({
-  list = [],
-  keywords = [],
-  pageType = 'mail',
-}) => new Vue({
+const vm = new Vue({
   el: '#app',
   data() {
     return {
-      list,
+      list: [],
 
-      keywords,
-
-      pageType,
+      keywords: [],
 
       dialogOpen: false,
 
       isEdit: false,
+
+      currentId: null,
+
+      total: 0,
+
+      page: 1,
+
+      pagesize: 10,
 
       form: defaultForm,
     };
@@ -35,12 +38,30 @@ window.pageInit = ({
       this.dialogOpen = true;
     },
 
-    handleSubmit() {
-      const url = this.isEdit ? `/api/${pageType}Template/edit` : `/api/${pageType}Template/add`;
+    getList(pageIndex = 1) {
       fetch({
-        url,
+        url: '/smstemplate/list.sj',
         type: 'POST',
-        data: this.form,
+        data: {
+          pageIndex,
+        },
+      })
+        .then(
+          (res) => {
+            this.list = res.list;
+            this.total = res.total;
+          },
+        );
+    },
+
+    handleSubmit() {
+      const d = this.isEdit ? { id: this.currentId } : {};
+      d.name = this.form.name;
+      d.content = this.form.content;
+      fetch({
+        url: '/smstemplate/save.sj',
+        type: 'POST',
+        data: d,
       })
         .then(
           () => {
@@ -52,6 +73,7 @@ window.pageInit = ({
 
     handleEdit(item) {
       this.form = item;
+      this.currentId = item.id;
       this.isEdit = true;
       this.dialogOpen = true;
     },
@@ -65,7 +87,7 @@ window.pageInit = ({
         .then(
           () => {
             fetch({
-              url: `/api/${pageType}Template/delete`,
+              url: '/smstemplate/delete.sj',
               type: 'POST',
               data: {
                 id: item.id,
@@ -82,24 +104,11 @@ window.pageInit = ({
       this.form.content += item.value;
     },
 
-    // Just for test
-    handleTest() {
-      const email = window.prompt('输入要发送的邮箱地址');
-      const id = window.prompt('输入模板id');
-      fetch({
-        url: '/api/mailTemplate/test',
-        type: 'POST',
-        data: {
-          id,
-          email,
-        },
-      })
-      .then(
-        (r) => {
-          if (r.success) this.$message('发送成功');
-        },
-      );
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getList(val);
     },
-
   },
 });
+
+vm.getList();

@@ -15,7 +15,7 @@ list.forEach(function(item) {
 module.exports = {
   entry: entries,
   output: {
-    path: path.resolve(__dirname, 'js'),
+    path: path.resolve(__dirname, '../../../resources/js'),
     filename: '[name].js'
   },
   resolve: {
